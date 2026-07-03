@@ -190,16 +190,69 @@ pub fn[K : Compare, V] SortedMap::range(
   from : K,
   to : K,
 ) -> Array[(K, V)] {
+  if self.entries.length() == 0 {
+    return []
+  }
+  // Use binary search to find the start index (first key >= from)
+  let mut lo = 0
+  let mut hi = self.entries.length()
+  while lo < hi {
+    let mid = lo + (hi - lo) / 2
+    let (k, _) = self.entries[mid]
+    if k.compare(from) < 0 {
+      lo = mid + 1
+    } else {
+      hi = mid
+    }
+  }
+  if lo >= self.entries.length() {
+    return []
+  }
+  // Linear scan from start index while key <= to
   let result : Array[(K, V)] = []
-  let mut i = 0
+  let mut i = lo
   while i < self.entries.length() {
     let (k, v) = self.entries[i]
-    if k.compare(from) >= 0 && k.compare(to) <= 0 {
+    if k.compare(to) <= 0 {
       result.push((k, v))
+    } else {
+      break
     }
     i = i + 1
   }
   result
+}
+
+///|
+pub fn[K : Compare, V] SortedMap::floor(
+  self : SortedMap[K, V],
+  key : K,
+) -> (K, V)? {
+  let idx = SortedMap::binary_search(self, key)
+  if idx >= 0 {
+    Some(self.entries[idx])
+  } else {
+    let insert_pos = -(idx + 1)
+    if insert_pos > 0 {
+      Some(self.entries[insert_pos - 1])
+    } else {
+      None
+    }
+  }
+}
+
+///|
+pub fn[K : Compare, V] SortedMap::ceil(
+  self : SortedMap[K, V],
+  key : K,
+) -> (K, V)? {
+  let idx = SortedMap::binary_search(self, key)
+  let pos = if idx >= 0 { idx } else { -(idx + 1) }
+  if pos < self.entries.length() {
+    Some(self.entries[pos])
+  } else {
+    None
+  }
 }
 
 ///|
