@@ -50,7 +50,7 @@ pub struct BitSet {
   mut len : Int
   mut fp_cache : UInt64
   mut fp_dirty : Bool
-} derive(Eq)
+}
 pub fn BitSet::all_set(Self) -> Bool
 pub fn BitSet::any(Self) -> Bool
 pub fn BitSet::capacity(Self) -> Int
@@ -93,6 +93,7 @@ pub fn BitSet::toggle(Self, Int) -> Unit
 pub fn BitSet::truncate(Self, Int) -> Unit
 pub fn BitSet::union(Self, Self) -> Self
 pub fn BitSet::union_with(Self, Self) -> Unit
+pub impl Eq for BitSet
 pub impl @debug.Debug for BitSet
 pub impl @traits.Collection for BitSet
 pub impl @traits.Deterministic for BitSet

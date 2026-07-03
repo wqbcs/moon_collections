@@ -40,7 +40,7 @@ moon add wqbcs/moon_collections
 ## Quick Start
 
 ```moonbit nocheck
-let m = IndexMap::new()
+let m = @indexmap.IndexMap::new()
 m.insert("name", "Alice")
 m.insert("age", "30")
 m.insert("city", "Beijing")
@@ -52,7 +52,7 @@ m.keys_array() // => ["name", "age", "city"]
 m.fingerprint() // => 14528911724609714292UL (computed, cached)
 
 // Position-aware equality
-let m2 = IndexMap::new()
+let m2 = @indexmap.IndexMap::new()
 m2.insert("name", "Alice")
 m2.insert("age", "30")
 m2.insert("city", "Beijing")
