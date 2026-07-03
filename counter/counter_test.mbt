@@ -62,7 +62,7 @@ test "counter_add_subtract_counter" {
   assert_true(sum.get("c") == 1)
   let diff = c1.subtract_counter(c2)
   assert_true(diff.get("a") == 1)
-  assert_true(diff.get("c") == -1)
+  assert_true(!diff.contains("c"))
 }
 
 ///|
@@ -140,10 +140,10 @@ test "counter_subtract_counter_diff" {
   let diff = c1.subtract_counter(c2)
   assert_true(diff.get("a") == 2)
   assert_true(diff.get("b") == 1)
-  assert_true(diff.get("c") == -1)
+  assert_true(!diff.contains("c"))
   let diff2 = c2.subtract_counter(c1)
-  assert_true(diff2.get("a") == -2)
   assert_true(diff2.get("c") == 1)
+  assert_true(!diff2.contains("a"))
 }
 
 ///|

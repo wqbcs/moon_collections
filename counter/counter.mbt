@@ -177,9 +177,12 @@ pub fn[K : Hash + Eq] Counter::subtract_counter(
   other : Counter[K],
 ) -> Counter[K] {
   let result = Counter::new()
-  self.map.each(fn(k : K, v : Int) -> Unit { result.set(k, v) })
-  other.map.each(fn(k : K, v : Int) -> Unit {
-    result.set(k, Counter::get(result, k) - v)
+  self.map.each(fn(k : K, v : Int) -> Unit {
+    let other_v = Counter::get(other, k)
+    let new_v = v - other_v
+    if new_v > 0 {
+      result.set(k, new_v)
+    }
   })
   result
 }
