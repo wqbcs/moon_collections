@@ -45,7 +45,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `diff_arrays` — O(n×m) → O(n+m) using IndexSet for O(1) membership check
 - `diff/moon.pkg` — added missing `indexmap` dependency
 - `Counter.subtract_counter` — no longer produces negative counts (removes keys that go to zero or below)
-- All 290 tests passing (up from 286)
+- `Counter.set` — now treats `count ≤ 0` as removal (was only removing on `count == 0`, allowing negative values to persist)
+- `Counter.map_keys` — fixed double evaluation of `f(k)` (was calling `f(k)` twice per entry)
+- `RingBuffer.pop_back` — tail pointer now updated only on successful pop (was mutating tail before confirming data existed)
+- `RingBuffer.ordered_eq` — now includes `capacity` check, consistent with `fingerprint()`
+- `SparseSet.ordered_eq` — now includes `capacity` check, consistent with `fingerprint()`
+- `fnv1a_hash_int` — fixed for negative values (MoonBit's `%` produces negative remainder, causing early loop termination and only 1-byte hash instead of 8)
+- `SortedMap.filter` — O(n²) → O(n) by filtering entries array directly instead of repeated `insert`
+- `SortedMap.map_values` — O(n²) → O(n) by building entries array directly
+- `SortedMap.merge` — O((n+m)²) → O(n+m) using two-pointer merge of sorted arrays
+- `SortedMap.range(from, to)` — now reuses existing `binary_search` and adds `from > to` early exit guard
+- `to_sorted_map` — O(n²) → O(n log n) using sort + `from_sorted_entries` instead of repeated insert
+- `DisjointSet.component_size` — O(n) → O(1) via dedicated `size` array maintained during union
+- `DisjointSet.all_components` — O(n²) → O(n) via two-pass counting and allocation
+- All 293 tests passing (up from 290)
 
 ## [0.1.0] - 2026-06-08
 

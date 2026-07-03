@@ -11,7 +11,7 @@
 
 name = "wqbcs/moon_collections"
 
-version = "0.1.0"
+version = "0.2.0"
 
 readme = "README.mbt.md"
 
@@ -42,4 +42,4 @@ keywords = [
   "ecs",
 ]
 
-description = "DETERMINISTIC × VERIFIABLE × COMPOSABLE collections for MoonBit/WASM — 12 ordered structures, FNV-1a fingerprints with lazy caching (all 11 Deterministic structs), 286 tests. Same input → same output → same fingerprint, always."
+description = "DETERMINISTIC × VERIFIABLE × COMPOSABLE collections for MoonBit/WASM — 12 ordered structures, FNV-1a fingerprints with lazy caching (all 11 Deterministic structs), 293 tests. Same input → same output → same fingerprint, always."
