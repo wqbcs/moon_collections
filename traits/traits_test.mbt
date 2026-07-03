@@ -24,7 +24,10 @@ pub impl @traits.Deterministic for TestCollection with fn fingerprint(self) -> U
 }
 
 ///|
-pub impl @traits.Deterministic for TestCollection with fn ordered_eq(self, other) -> Bool {
+pub impl @traits.Deterministic for TestCollection with fn ordered_eq(
+  self,
+  other,
+) -> Bool {
   self.val == other.val
 }
 

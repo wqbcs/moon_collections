@@ -245,7 +245,10 @@ pub fn DisjointSet::all_components(self : DisjointSet) -> Array[Array[Int]] {
 }
 
 ///|
-pub fn DisjointSet::component_elements(self : DisjointSet, x : Int) -> Array[Int] {
+pub fn DisjointSet::component_elements(
+  self : DisjointSet,
+  x : Int,
+) -> Array[Int] {
   let root = DisjointSet::find(self, x)
   if root == -1 {
     return []

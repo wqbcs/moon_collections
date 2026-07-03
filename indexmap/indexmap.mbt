@@ -417,7 +417,9 @@ pub fn[K : Hash + Eq, V] IndexMap::from_array(
 }
 
 ///|
-pub fn[K : Hash + Eq, V] IndexMap::clone(self : IndexMap[K, V]) -> IndexMap[K, V] {
+pub fn[K : Hash + Eq, V] IndexMap::clone(
+  self : IndexMap[K, V],
+) -> IndexMap[K, V] {
   IndexMap::from_array(IndexMap::to_array(self))
 }
 
@@ -782,14 +784,20 @@ pub fn[K : Hash + Eq, V] IndexMap::merge(
 }
 
 ///|
-pub fn[K : Hash + Eq, V] IndexMap::drain(self : IndexMap[K, V], pred : (K, V) -> Bool) -> IndexMap[K, V] {
+pub fn[K : Hash + Eq, V] IndexMap::drain(
+  self : IndexMap[K, V],
+  pred : (K, V) -> Bool,
+) -> IndexMap[K, V] {
   let drained = IndexMap::filter(self, pred)
   IndexMap::retain(self, fn(k : K, v : V) -> Bool { !pred(k, v) })
   drained
 }
 
 ///|
-pub fn[K : Hash + Eq, V] IndexMap::has_all(self : IndexMap[K, V], keys : Array[K]) -> Bool {
+pub fn[K : Hash + Eq, V] IndexMap::has_all(
+  self : IndexMap[K, V],
+  keys : Array[K],
+) -> Bool {
   let mut i = 0
   while i < keys.length() {
     if !self.contains(keys[i]) {
@@ -801,7 +809,10 @@ pub fn[K : Hash + Eq, V] IndexMap::has_all(self : IndexMap[K, V], keys : Array[K
 }
 
 ///|
-pub fn[K : Hash + Eq, V] IndexMap::has_any(self : IndexMap[K, V], keys : Array[K]) -> Bool {
+pub fn[K : Hash + Eq, V] IndexMap::has_any(
+  self : IndexMap[K, V],
+  keys : Array[K],
+) -> Bool {
   let mut i = 0
   while i < keys.length() {
     if self.contains(keys[i]) {
