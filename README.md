@@ -1,0 +1,65 @@
+# Project Agents.md Guide
+
+This is a [MoonBit](https://docs.moonbitlang.com) project.
+
+You can browse and install extra skills here:
+<https://github.com/moonbitlang/skills>
+
+## Project Structure
+
+- MoonBit packages are organized per directory; each directory contains a
+  `moon.pkg` file listing its dependencies. Each package has its files and
+  blackbox test files (ending in `_test.mbt`) and whitebox test files (ending in
+  `_wbtest.mbt`).
+
+- In the toplevel directory, there is a `moon.mod` file listing module
+  metadata.
+
+## Coding convention
+
+- MoonBit code is organized in block style, each block is separated by `///|`,
+  the order of each block is irrelevant. In some refactorings, you can process
+  block by block independently.
+
+- Try to keep deprecated blocks in file called `deprecated.mbt` in each
+  directory.
+
+## Tooling
+
+- `moon fmt` is used to format your code properly.
+
+- `moon ide` provides project navigation helpers like `peek-def`, `outline`, and
+  `find-references`. See $moonbit-agent-guide for details.
+
+- `moon info` is used to update the generated interface of the package, each
+  package has a generated interface file `.mbti`, it is a brief formal
+  description of the package. If nothing in `.mbti` changes, this means your
+  change does not bring the visible changes to the external package users, it is
+  typically a safe refactoring.
+
+- In the last step, run `moon info && moon fmt` to update the interface and
+  format the code. Check the diffs of `.mbti` file to see if the changes are
+  expected.
+
+- Run `moon test` to check tests pass. MoonBit supports snapshot testing; when
+  changes affect outputs, run `moon test --update` to refresh snapshots.
+
+- Prefer `assert_true` for assertions (note: `assert_eq` is deprecated in current MoonBit). For snapshot tests that record
+  structured debugging output, derive `Debug` and use `debug_inspect`, rather
+  than deriving `Show` for debugging. For solid, well-defined results (e.g.
+  scientific computations), prefer assertion tests. You can use
+  `moon coverage analyze > uncovered.log` to see which parts of your code are
+  not covered by tests.
+
+## moon_collections Specifics
+
+- **Core principle**: DETERMINISTIC × VERIFIABLE × COMPOSABLE
+- **12 data structures**: IndexMap, IndexSet, BitSet, BitFlags, Counter, DefaultMap, CompactIntMap, SortedMap, RingBuffer, SparseSet, DisjointSet, Diff
+- **2 open traits**: Collection (len, is_empty), Deterministic (fingerprint, ordered_eq)
+- **Fingerprint**: FNV-1a with lazy caching (fp_cache + fp_dirty) on all 11 Deterministic structs
+- **Key invariant**: remove() defaults to shift_remove (preserves insertion order)
+- **WASM safety**: at()/get() return Option (no abort/trap), RingBuffer fixed capacity
+- **Counter.most_common()**: stable sort (equal counts preserve insertion order via Schwartzian transform)
+- **DisjointSet.fingerprint()**: fully path-compresses before hashing (logical equivalence)
+- **Cross-structure conversion**: `convert` package provides `to_sorted_map()` and `to_index_map()`
+- **traits/fp/diff are leaf packages**: no circular dependencies with implementation packages
