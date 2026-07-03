@@ -351,6 +351,9 @@ pub impl[T : Hash + Eq] @traits.Deterministic for RingBuffer[T] with fn ordered_
   if self.count != other.count {
     return false
   }
+  if self.capacity != other.capacity {
+    return false
+  }
   let mut i = 0
   while i < self.count {
     if self.data[(self.head + i) % self.capacity] !=

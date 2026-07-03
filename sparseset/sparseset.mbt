@@ -232,6 +232,9 @@ pub impl[V : Hash + Eq] @traits.Deterministic for SparseSet[V] with fn ordered_e
   if self.count != other.count {
     return false
   }
+  if self.capacity != other.capacity {
+    return false
+  }
   let mut i = 0
   while i < self.count {
     if self.dense[i] != other.dense[i] {
