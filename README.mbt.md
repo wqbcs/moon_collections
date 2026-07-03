@@ -34,7 +34,7 @@ The `Deterministic` trait provides:
 ## Install
 
 ```bash
-moon add username/moon_collections
+moon add wqbcs/moon_collections
 ```
 
 ## Quick Start
@@ -49,7 +49,7 @@ m.insert("city", "Beijing")
 m.keys_array() // => ["name", "age", "city"]
 
 // Fingerprint verification
-m.fingerprint() // => 14695981039346656037UL (computed, cached)
+m.fingerprint() // => 14528911724609714292UL (computed, cached)
 
 // Position-aware equality
 let m2 = IndexMap::new()
