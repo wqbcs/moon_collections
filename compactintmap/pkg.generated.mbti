@@ -1,0 +1,47 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/moon_collections/compactintmap"
+
+import {
+  "moonbitlang/core/debug",
+  "username/moon_collections/traits",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct CompactIntMap[V] {
+  mut entries : Array[(Int, V)]
+  mut fp_cache : UInt64
+  mut fp_dirty : Bool
+} derive(@debug.Debug)
+pub fn[V] CompactIntMap::clear(Self[V]) -> Unit
+pub fn[V] CompactIntMap::contains(Self[V], Int) -> Bool
+pub fn[V] CompactIntMap::each(Self[V], (Int, V) -> Unit) -> Unit
+pub fn[V] CompactIntMap::from_array(Array[(Int, V)]) -> Self[V]
+pub fn[V] CompactIntMap::get(Self[V], Int) -> V?
+pub fn[V] CompactIntMap::get_or_insert(Self[V], Int, V) -> V
+pub fn[V] CompactIntMap::get_or_insert_with(Self[V], Int, () -> V) -> V
+pub fn[V] CompactIntMap::insert(Self[V], Int, V) -> V?
+pub fn[V] CompactIntMap::is_empty(Self[V]) -> Bool
+pub fn[V] CompactIntMap::iter(Self[V]) -> Iter[(Int, V)]
+pub fn[V] CompactIntMap::keys(Self[V]) -> Iter[Int]
+pub fn[V] CompactIntMap::keys_array(Self[V]) -> Array[Int]
+pub fn[V] CompactIntMap::len(Self[V]) -> Int
+pub fn[V] CompactIntMap::max_key(Self[V]) -> Int?
+pub fn[V] CompactIntMap::min_key(Self[V]) -> Int?
+pub fn[V] CompactIntMap::new() -> Self[V]
+pub fn[V] CompactIntMap::remove(Self[V], Int) -> V?
+pub fn[V] CompactIntMap::to_array(Self[V]) -> Array[(Int, V)]
+pub fn[V] CompactIntMap::update(Self[V], Int, (V) -> V) -> Bool
+pub fn[V] CompactIntMap::values(Self[V]) -> Iter[V]
+pub fn[V] CompactIntMap::values_array(Self[V]) -> Array[V]
+pub impl[V : Eq] Eq for CompactIntMap[V]
+pub impl[V] @traits.Collection for CompactIntMap[V]
+pub impl[V : Hash + Eq] @traits.Deterministic for CompactIntMap[V]
+
+// Type aliases
+
+// Traits
+

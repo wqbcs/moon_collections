@@ -1,0 +1,122 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/moon_collections/indexmap"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/hashmap",
+  "username/moon_collections/traits",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct Entry[K, V] {
+  key : K
+  value : V
+} derive(Eq, @debug.Debug)
+
+pub struct IndexMap[K, V] {
+  mut entries : Array[Entry[K, V]]
+  mut indices : @hashmap.HashMap[K, Int]
+  mut fp_cache : UInt64
+  mut fp_dirty : Bool
+}
+pub fn[K : Hash + Eq, V] IndexMap::at(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] IndexMap::clear(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::contains(Self[K, V], K) -> Bool
+pub fn[K, V] IndexMap::each(Self[K, V], (K, V) -> Unit) -> Unit
+pub fn[K, V] IndexMap::entries(Self[K, V]) -> Array[Entry[K, V]]
+pub fn[K : Hash + Eq, V] IndexMap::filter(Self[K, V], (K, V) -> Bool) -> Self[K, V]
+pub fn[K, V] IndexMap::first(Self[K, V]) -> (K, V)?
+pub fn[K : Hash + Eq, V] IndexMap::from_array(Array[(K, V)]) -> Self[K, V]
+pub fn[K : Hash + Eq, V] IndexMap::get(Self[K, V], K) -> V?
+pub fn[K, V] IndexMap::get_index(Self[K, V], Int) -> (K, V)?
+pub fn[K : Hash + Eq, V] IndexMap::get_index_of(Self[K, V], K) -> Int?
+pub fn[K, V] IndexMap::get_key_at(Self[K, V], Int) -> K?
+pub fn[K : Hash + Eq, V] IndexMap::get_or_insert(Self[K, V], K, V) -> V
+pub fn[K : Hash + Eq, V] IndexMap::get_or_insert_with(Self[K, V], K, () -> V) -> V
+pub fn[K, V] IndexMap::get_value_at(Self[K, V], Int) -> V?
+pub fn[K : Hash + Eq, V] IndexMap::insert(Self[K, V], K, V) -> V?
+pub fn[K : Hash + Eq, V] IndexMap::insert_after(Self[K, V], K, K, V) -> Bool
+pub fn[K : Hash + Eq, V] IndexMap::insert_before(Self[K, V], K, K, V) -> Bool
+pub fn[K, V] IndexMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] IndexMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] IndexMap::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] IndexMap::keys_array(Self[K, V]) -> Array[K]
+pub fn[K, V] IndexMap::last(Self[K, V]) -> (K, V)?
+pub fn[K, V] IndexMap::len(Self[K, V]) -> Int
+pub fn[K : Hash + Eq, V, R] IndexMap::map_values(Self[K, V], (V) -> R) -> Self[K, R]
+pub fn[K : Hash + Eq, V] IndexMap::merge(Self[K, V], Self[K, V], (V, V) -> V) -> Self[K, V]
+pub fn[K : Hash + Eq, V] IndexMap::move_to_back(Self[K, V], K) -> Bool
+pub fn[K : Hash + Eq, V] IndexMap::move_to_front(Self[K, V], K) -> Bool
+pub fn[K : Hash + Eq, V] IndexMap::new() -> Self[K, V]
+#alias("_[_]")
+pub fn[K : Hash + Eq, V] IndexMap::op_index(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] IndexMap::op_set(Self[K, V], K, V) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::pop_back(Self[K, V]) -> (K, V)?
+pub fn[K : Hash + Eq, V] IndexMap::pop_front(Self[K, V]) -> (K, V)?
+pub fn[K : Hash + Eq, V] IndexMap::remove(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] IndexMap::remove_entry(Self[K, V], K) -> (K, V)?
+pub fn[K : Hash + Eq, V] IndexMap::retain(Self[K, V], (K, V) -> Bool) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::retain_keys(Self[K, V], (K) -> Bool) -> Unit
+pub fn[K, V] IndexMap::rev_iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K : Hash + Eq, V] IndexMap::reverse(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::shift_remove(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] IndexMap::shift_remove_index(Self[K, V], Int) -> (K, V)?
+pub fn[K : Hash + Eq + Compare, V] IndexMap::sort_keys(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::swap_indices(Self[K, V], Int, Int) -> Bool
+pub fn[K : Hash + Eq, V] IndexMap::swap_remove(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] IndexMap::swap_remove_index(Self[K, V], Int) -> (K, V)?
+pub fn[K, V] IndexMap::to_array(Self[K, V]) -> Array[(K, V)]
+pub fn[K : Hash + Eq, V] IndexMap::update(Self[K, V], K, (V) -> V) -> Bool
+pub fn[K : Hash + Eq, V] IndexMap::update_or_insert(Self[K, V], K, (V) -> V, V) -> V
+pub fn[K, V] IndexMap::values(Self[K, V]) -> Iter[V]
+pub fn[K, V] IndexMap::values_array(Self[K, V]) -> Array[V]
+pub impl[K : Eq, V : Eq] Eq for IndexMap[K, V]
+pub impl[K : @debug.Debug, V : @debug.Debug] @debug.Debug for IndexMap[K, V]
+pub impl[K, V] @traits.Collection for IndexMap[K, V]
+pub impl[K : Hash + Eq, V : Hash + Eq] @traits.Deterministic for IndexMap[K, V]
+
+pub struct IndexSet[K] {
+  map : IndexMap[K, Unit]
+} derive(@debug.Debug)
+pub fn[K : Hash + Eq] IndexSet::clear(Self[K]) -> Unit
+pub fn[K : Hash + Eq] IndexSet::contains(Self[K], K) -> Bool
+pub fn[K : Hash + Eq] IndexSet::difference(Self[K], Self[K]) -> Self[K]
+pub fn[K] IndexSet::each(Self[K], (K) -> Unit) -> Unit
+pub fn[K : Hash + Eq] IndexSet::extend(Self[K], Array[K]) -> Unit
+pub fn[K : Hash + Eq] IndexSet::from_array(Array[K]) -> Self[K]
+pub fn[K] IndexSet::get_index(Self[K], Int) -> K?
+pub fn[K : Hash + Eq] IndexSet::get_index_of(Self[K], K) -> Int?
+pub fn[K : Hash + Eq] IndexSet::insert(Self[K], K) -> Unit
+pub fn[K : Hash + Eq] IndexSet::intersect(Self[K], Self[K]) -> Self[K]
+pub fn[K : Hash + Eq] IndexSet::is_disjoint(Self[K], Self[K]) -> Bool
+pub fn[K] IndexSet::is_empty(Self[K]) -> Bool
+pub fn[K : Hash + Eq] IndexSet::is_subset(Self[K], Self[K]) -> Bool
+pub fn[K : Hash + Eq] IndexSet::is_superset(Self[K], Self[K]) -> Bool
+pub fn[K] IndexSet::iter(Self[K]) -> Iter[K]
+pub fn[K] IndexSet::keys(Self[K]) -> Iter[K]
+pub fn[K] IndexSet::len(Self[K]) -> Int
+pub fn[K : Hash + Eq] IndexSet::move_to_back(Self[K], K) -> Bool
+pub fn[K : Hash + Eq] IndexSet::move_to_front(Self[K], K) -> Bool
+pub fn[K : Hash + Eq] IndexSet::new() -> Self[K]
+pub fn[K : Hash + Eq] IndexSet::pop_back(Self[K]) -> K?
+pub fn[K : Hash + Eq] IndexSet::pop_front(Self[K]) -> K?
+pub fn[K : Hash + Eq] IndexSet::remove(Self[K], K) -> Bool
+pub fn[K : Hash + Eq] IndexSet::retain(Self[K], (K) -> Bool) -> Unit
+pub fn[K] IndexSet::rev_iter(Self[K]) -> Iter[K]
+pub fn[K : Hash + Eq] IndexSet::reverse(Self[K]) -> Unit
+pub fn[K : Hash + Eq] IndexSet::shift_remove(Self[K], K) -> Bool
+pub fn[K : Hash + Eq] IndexSet::symmetric_difference(Self[K], Self[K]) -> Self[K]
+pub fn[K] IndexSet::to_array(Self[K]) -> Array[K]
+pub fn[K : Hash + Eq] IndexSet::union(Self[K], Self[K]) -> Self[K]
+pub impl[K : Eq] Eq for IndexSet[K]
+pub impl[K] @traits.Collection for IndexSet[K]
+pub impl[K : Hash + Eq] @traits.Deterministic for IndexSet[K]
+
+// Type aliases
+
+// Traits
+

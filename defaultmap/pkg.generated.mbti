@@ -1,0 +1,45 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/moon_collections/defaultmap"
+
+import {
+  "moonbitlang/core/debug",
+  "username/moon_collections/indexmap",
+  "username/moon_collections/traits",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct DefaultMap[K, V] {
+  map : @indexmap.IndexMap[K, V]
+  default_fn : () -> V
+} derive(@debug.Debug)
+pub fn[K : Hash + Eq, V] DefaultMap::clear(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] DefaultMap::contains(Self[K, V], K) -> Bool
+pub fn[K, V] DefaultMap::each(Self[K, V], (K, V) -> Unit) -> Unit
+pub fn[K, V] DefaultMap::each_entry(Self[K, V], (Int, K, V) -> Unit) -> Unit
+pub fn[K : Hash + Eq, V] DefaultMap::from_array(() -> V, Array[(K, V)]) -> Self[K, V]
+pub fn[K : Hash + Eq, V] DefaultMap::get(Self[K, V], K) -> V
+pub fn[K : Hash + Eq, V] DefaultMap::get_existing(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] DefaultMap::get_or_insert(Self[K, V], K) -> V
+pub fn[K : Hash + Eq, V] DefaultMap::insert(Self[K, V], K, V) -> V?
+pub fn[K, V] DefaultMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] DefaultMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] DefaultMap::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] DefaultMap::keys_array(Self[K, V]) -> Array[K]
+pub fn[K, V] DefaultMap::len(Self[K, V]) -> Int
+pub fn[K : Hash + Eq, V] DefaultMap::new(() -> V) -> Self[K, V]
+pub fn[K : Hash + Eq, V] DefaultMap::remove(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] DefaultMap::retain(Self[K, V], (K, V) -> Bool) -> Unit
+pub fn[K : Hash + Eq, V] DefaultMap::update(Self[K, V], K, (V) -> V) -> Unit
+pub fn[K, V] DefaultMap::values(Self[K, V]) -> Iter[V]
+pub fn[K, V] DefaultMap::values_array(Self[K, V]) -> Array[V]
+pub impl[K, V] @traits.Collection for DefaultMap[K, V]
+pub impl[K : Hash + Eq, V : Hash + Eq] @traits.Deterministic for DefaultMap[K, V]
+
+// Type aliases
+
+// Traits
+

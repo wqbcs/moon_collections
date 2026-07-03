@@ -1,0 +1,8 @@
+import {
+  "wqbcs/moon_collections/indexmap",
+  "wqbcs/moon_collections/sortedmap",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"

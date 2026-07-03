@@ -1,0 +1,52 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/moon_collections/counter"
+
+import {
+  "moonbitlang/core/debug",
+  "username/moon_collections/indexmap",
+  "username/moon_collections/traits",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct Counter[K] {
+  map : @indexmap.IndexMap[K, Int]
+} derive(@debug.Debug)
+pub fn[K : Hash + Eq] Counter::add(Self[K], K) -> Unit
+pub fn[K : Hash + Eq] Counter::add_counter(Self[K], Self[K]) -> Self[K]
+pub fn[K : Hash + Eq] Counter::clear(Self[K]) -> Unit
+pub fn[K : Hash + Eq] Counter::contains(Self[K], K) -> Bool
+pub fn[K] Counter::each(Self[K], (K, Int) -> Unit) -> Unit
+pub fn[K] Counter::elements(Self[K]) -> Array[K]
+pub fn[K : Hash + Eq] Counter::filter(Self[K], (K, Int) -> Bool) -> Self[K]
+pub fn[K : Hash + Eq] Counter::from_array(Array[K]) -> Self[K]
+pub fn[K : Hash + Eq] Counter::from_array_with_weight(Array[(K, Int)]) -> Self[K]
+pub fn[K : Hash + Eq] Counter::get(Self[K], K) -> Int
+pub fn[K] Counter::is_empty(Self[K]) -> Bool
+pub fn[K] Counter::items(Self[K]) -> Array[(K, Int)]
+pub fn[K] Counter::iter(Self[K]) -> Iter[(K, Int)]
+pub fn[K] Counter::keys(Self[K]) -> Iter[K]
+pub fn[K] Counter::keys_array(Self[K]) -> Array[K]
+pub fn[K] Counter::len(Self[K]) -> Int
+pub fn[K, R : Hash + Eq] Counter::map_keys(Self[K], (K) -> R) -> Self[R]
+pub fn[K] Counter::max_count(Self[K]) -> Int
+pub fn[K : Hash + Eq] Counter::min_count(Self[K]) -> Int
+pub fn[K : Hash + Eq] Counter::most_common(Self[K], Int) -> Array[(K, Int)]
+pub fn[K : Hash + Eq] Counter::new() -> Self[K]
+pub fn[K : Hash + Eq] Counter::remove(Self[K], K) -> Int
+pub fn[K : Hash + Eq] Counter::retain(Self[K], (K, Int) -> Bool) -> Unit
+pub fn[K : Hash + Eq] Counter::scale(Self[K], Int) -> Self[K]
+pub fn[K : Hash + Eq] Counter::set(Self[K], K, Int) -> Unit
+pub fn[K : Hash + Eq] Counter::subtract(Self[K], K) -> Unit
+pub fn[K : Hash + Eq] Counter::subtract_counter(Self[K], Self[K]) -> Self[K]
+pub fn[K] Counter::total(Self[K]) -> Int
+pub impl[K] @traits.Collection for Counter[K]
+pub impl[K : Hash + Eq] @traits.Deterministic for Counter[K]
+
+// Type aliases
+
+// Traits
+

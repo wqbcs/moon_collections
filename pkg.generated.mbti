@@ -1,0 +1,64 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/moon_collections"
+
+import {
+  "username/moon_collections/bitmask",
+  "username/moon_collections/compactintmap",
+  "username/moon_collections/counter",
+  "username/moon_collections/defaultmap",
+  "username/moon_collections/disjointset",
+  "username/moon_collections/fingerprint",
+  "username/moon_collections/indexmap",
+  "username/moon_collections/ringbuffer",
+  "username/moon_collections/sortedmap",
+  "username/moon_collections/sparseset",
+  "username/moon_collections/traits",
+}
+
+// Values
+pub fn[T : @traits.Collection] collection_len(T) -> Int
+
+pub fn edit_distance(Array[Int], Array[Int]) -> Int
+
+pub fn fingerprint_ints(Array[Int]) -> UInt64
+
+pub fn fingerprint_strings(Array[String]) -> UInt64
+
+pub fn lcs_length(Array[Int], Array[Int]) -> Int
+
+pub fn new_bit_flags() -> @bitmask.BitFlags
+
+pub fn new_bit_set(Int) -> @bitmask.BitSet
+
+pub fn[V] new_compact_int_map() -> @compactintmap.CompactIntMap[V]
+
+pub fn[K : Hash + Eq] new_counter() -> @counter.Counter[K]
+
+pub fn[K : Hash + Eq, V] new_default_map(() -> V) -> @defaultmap.DefaultMap[K, V]
+
+pub fn new_disjoint_set(Int) -> @disjointset.DisjointSet
+
+pub fn[K : Hash + Eq, V] new_index_map() -> @indexmap.IndexMap[K, V]
+
+pub fn[K : Hash + Eq] new_index_set() -> @indexmap.IndexSet[K]
+
+pub fn[T] new_ring_buffer(Int) -> @ringbuffer.RingBuffer[T]
+
+pub fn new_rolling_fingerprint() -> @fingerprint.RollingFingerprint
+
+pub fn[K, V] new_sorted_map() -> @sortedmap.SortedMap[K, V]
+
+pub fn[V] new_sparse_set(Int) -> @sparseset.SparseSet[V]
+
+pub fn[K : Hash + Eq, V] to_index_map(@sortedmap.SortedMap[K, V]) -> @indexmap.IndexMap[K, V]
+
+pub fn[K : Compare, V] to_sorted_map(@indexmap.IndexMap[K, V]) -> @sortedmap.SortedMap[K, V]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

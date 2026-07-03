@@ -1,0 +1,96 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/moon_collections/bitmask"
+
+import {
+  "moonbitlang/core/debug",
+  "username/moon_collections/traits",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct BitFlags {
+  bits : UInt64
+} derive(Eq, @debug.Debug)
+pub fn BitFlags::all() -> Self
+pub fn BitFlags::bits(Self) -> UInt64
+pub fn BitFlags::clear_all(Self) -> Self
+pub fn BitFlags::complement(Self) -> Self
+pub fn BitFlags::contains(Self, UInt64) -> Bool
+pub fn BitFlags::count_ones(Self) -> Int
+pub fn BitFlags::count_zeros(Self) -> Int
+pub fn BitFlags::difference(Self, Self) -> Self
+pub fn BitFlags::from_bits(UInt64) -> Self
+pub fn BitFlags::insert(Self, UInt64) -> Self
+pub fn BitFlags::intersect(Self, Self) -> Self
+pub fn BitFlags::intersects(Self, Self) -> Bool
+pub fn BitFlags::is_disjoint(Self, Self) -> Bool
+pub fn BitFlags::is_empty(Self) -> Bool
+pub fn BitFlags::is_subset(Self, Self) -> Bool
+pub fn BitFlags::is_superset(Self, Self) -> Bool
+pub fn BitFlags::len(Self) -> Int
+pub fn BitFlags::new() -> Self
+pub fn BitFlags::none() -> Self
+pub fn BitFlags::remove(Self, UInt64) -> Self
+pub fn BitFlags::set_all(Self) -> Self
+pub fn BitFlags::symmetric_difference(Self, Self) -> Self
+pub fn BitFlags::to_bit_string(Self) -> String
+pub fn BitFlags::toggle(Self, UInt64) -> Self
+pub fn BitFlags::union(Self, Self) -> Self
+pub impl BitAnd for BitFlags
+pub impl BitOr for BitFlags
+pub impl BitXOr for BitFlags
+pub impl @traits.Collection for BitFlags
+pub impl @traits.Deterministic for BitFlags
+
+pub struct BitSet {
+  bits : Array[UInt64]
+  mut len : Int
+  mut fp_cache : UInt64
+  mut fp_dirty : Bool
+} derive(Eq)
+pub fn BitSet::all_set(Self) -> Bool
+pub fn BitSet::any(Self) -> Bool
+pub fn BitSet::capacity(Self) -> Int
+pub fn BitSet::clear(Self, Int) -> Unit
+pub fn BitSet::clear_all(Self) -> Unit
+pub fn BitSet::clone(Self) -> Self
+pub fn BitSet::complement(Self) -> Self
+pub fn BitSet::contains(Self, Int) -> Bool
+pub fn BitSet::count_ones(Self) -> Int
+pub fn BitSet::count_zeros(Self) -> Int
+pub fn BitSet::difference(Self, Self) -> Self
+pub fn BitSet::extend(Self, Int) -> Unit
+pub fn BitSet::first_one(Self) -> Int?
+pub fn BitSet::from_indices(Array[Int]) -> Self
+pub fn BitSet::intersect(Self, Self) -> Self
+pub fn BitSet::is_disjoint(Self, Self) -> Bool
+pub fn BitSet::is_empty(Self) -> Bool
+pub fn BitSet::is_strict_subset(Self, Self) -> Bool
+pub fn BitSet::is_subset(Self, Self) -> Bool
+pub fn BitSet::is_superset(Self, Self) -> Bool
+pub fn BitSet::last_one(Self) -> Int?
+pub fn BitSet::length(Self) -> Int
+pub fn BitSet::new(Int) -> Self
+pub fn BitSet::next_one(Self, Int) -> Int?
+pub fn BitSet::none() -> Self
+pub fn BitSet::prev_one(Self, Int) -> Int?
+pub fn BitSet::resize(Self, Int) -> Unit
+pub fn BitSet::set(Self, Int) -> Unit
+pub fn BitSet::set_all(Self) -> Unit
+pub fn BitSet::symmetric_difference(Self, Self) -> Self
+pub fn BitSet::to_bit_string(Self) -> String
+pub fn BitSet::to_indices(Self) -> Array[Int]
+pub fn BitSet::toggle(Self, Int) -> Unit
+pub fn BitSet::truncate(Self, Int) -> Unit
+pub fn BitSet::union(Self, Self) -> Self
+pub impl @debug.Debug for BitSet
+pub impl @traits.Collection for BitSet
+pub impl @traits.Deterministic for BitSet
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,21 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/moon_collections/convert"
+
+import {
+  "username/moon_collections/indexmap",
+  "username/moon_collections/sortedmap",
+}
+
+// Values
+pub fn[K : Hash + Eq, V] to_index_map(@sortedmap.SortedMap[K, V]) -> @indexmap.IndexMap[K, V]
+
+pub fn[K : Compare, V] to_sorted_map(@indexmap.IndexMap[K, V]) -> @sortedmap.SortedMap[K, V]
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

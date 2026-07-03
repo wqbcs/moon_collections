@@ -1,0 +1,10 @@
+import {
+  "wqbcs/moon_collections/indexmap",
+  "wqbcs/moon_collections/counter",
+  "wqbcs/moon_collections/ringbuffer",
+  "wqbcs/moon_collections/sparseset",
+}
+
+options(
+  "is-main": true,
+)

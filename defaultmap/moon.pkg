@@ -1,0 +1,11 @@
+import {
+  "moonbitlang/core/array",
+  "moonbitlang/core/int",
+  "moonbitlang/core/option",
+  "wqbcs/moon_collections/indexmap",
+  "wqbcs/moon_collections/traits",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"

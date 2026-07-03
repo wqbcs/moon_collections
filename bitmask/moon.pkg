@@ -1,0 +1,14 @@
+import {
+  "moonbitlang/core/uint64",
+  "moonbitlang/core/array",
+  "moonbitlang/core/option",
+  "moonbitlang/core/int",
+  "moonbitlang/core/bool",
+  "moonbitlang/core/string",
+  "wqbcs/moon_collections/traits",
+  "wqbcs/moon_collections/fingerprint" @fp,
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"

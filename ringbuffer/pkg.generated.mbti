@@ -1,0 +1,61 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/moon_collections/ringbuffer"
+
+import {
+  "moonbitlang/core/debug",
+  "username/moon_collections/traits",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct RingBuffer[T] {
+  data : Array[T?]
+  mut head : Int
+  mut tail : Int
+  mut count : Int
+  capacity : Int
+  mut fp_cache : UInt64
+  mut fp_dirty : Bool
+}
+pub fn[T] RingBuffer::back(Self[T]) -> T?
+pub fn[T] RingBuffer::capacity(Self[T]) -> Int
+pub fn[T] RingBuffer::clear(Self[T]) -> Unit
+pub fn[T : Eq] RingBuffer::contains(Self[T], T) -> Bool
+pub fn[T : Eq] RingBuffer::count_item(Self[T], T) -> Int
+pub fn[T] RingBuffer::drain(Self[T], Int) -> Array[T]
+pub fn[T] RingBuffer::each(Self[T], (T) -> Unit) -> Unit
+pub fn[T] RingBuffer::extend(Self[T], Array[T]) -> Unit
+pub fn[T] RingBuffer::from_array(Array[T]) -> Self[T]
+pub fn[T] RingBuffer::front(Self[T]) -> T?
+pub fn[T] RingBuffer::get(Self[T], Int) -> T?
+pub fn[T : Eq] RingBuffer::index_of(Self[T], T) -> Int?
+pub fn[T] RingBuffer::is_empty(Self[T]) -> Bool
+pub fn[T] RingBuffer::is_full(Self[T]) -> Bool
+pub fn[T] RingBuffer::iter(Self[T]) -> Iter[T]
+pub fn[T] RingBuffer::len(Self[T]) -> Int
+pub fn[T] RingBuffer::new(Int) -> Self[T]
+pub fn[T] RingBuffer::pop_back(Self[T]) -> T?
+pub fn[T] RingBuffer::pop_front(Self[T]) -> T?
+pub fn[T] RingBuffer::push_back(Self[T], T) -> T?
+pub fn[T] RingBuffer::push_front(Self[T], T) -> T?
+pub fn[T : Eq] RingBuffer::remove_first(Self[T], T) -> Bool
+pub fn[T] RingBuffer::resize(Self[T], Int) -> Self[T]
+pub fn[T] RingBuffer::reverse(Self[T]) -> Unit
+pub fn[T] RingBuffer::rotate_left(Self[T], Int) -> Unit
+pub fn[T] RingBuffer::rotate_right(Self[T], Int) -> Unit
+pub fn[T] RingBuffer::set(Self[T], Int, T) -> Bool
+pub fn[T] RingBuffer::skip(Self[T], Int) -> Array[T]
+pub fn[T] RingBuffer::take(Self[T], Int) -> Array[T]
+pub fn[T] RingBuffer::to_array(Self[T]) -> Array[T]
+pub impl[T : Eq] Eq for RingBuffer[T]
+pub impl[T : @debug.Debug] @debug.Debug for RingBuffer[T]
+pub impl[T] @traits.Collection for RingBuffer[T]
+pub impl[T : Hash + Eq] @traits.Deterministic for RingBuffer[T]
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,53 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/moon_collections/fingerprint"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn combine(UInt64, UInt64) -> UInt64
+
+pub fn fingerprint_bytes(Array[Int]) -> UInt64
+
+pub fn fingerprint_ints(Array[Int]) -> UInt64
+
+pub fn fingerprint_strings(Array[String]) -> UInt64
+
+pub fn fingerprint_uint64s(Array[UInt64]) -> UInt64
+
+pub fn fnv1a_hash_byte(Int, UInt64) -> UInt64
+
+pub fn fnv1a_hash_int(Int, UInt64) -> UInt64
+
+pub fn fnv1a_hash_string(String, UInt64) -> UInt64
+
+pub fn fnv1a_hash_uint64(UInt64, UInt64) -> UInt64
+
+pub let fnv_offset_basis : UInt64
+
+pub let fnv_prime : UInt64
+
+// Errors
+
+// Types and methods
+pub struct RollingFingerprint {
+  mut hash : UInt64
+  mut count : Int
+} derive(Eq, @debug.Debug)
+pub fn RollingFingerprint::combine(Self, Self) -> Self
+pub fn RollingFingerprint::count(Self) -> Int
+pub fn RollingFingerprint::from_hash(UInt64, Int) -> Self
+pub fn RollingFingerprint::hash(Self) -> UInt64
+pub fn RollingFingerprint::is_empty(Self) -> Bool
+pub fn RollingFingerprint::new() -> Self
+pub fn RollingFingerprint::reset(Self) -> Unit
+pub fn RollingFingerprint::update_byte(Self, Int) -> Unit
+pub fn RollingFingerprint::update_int(Self, Int) -> Unit
+pub fn RollingFingerprint::update_string(Self, String) -> Unit
+pub fn RollingFingerprint::update_uint64(Self, UInt64) -> Unit
+
+// Type aliases
+
+// Traits
+

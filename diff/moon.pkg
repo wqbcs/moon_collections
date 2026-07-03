@@ -1,0 +1,9 @@
+import {
+  "moonbitlang/core/array",
+  "moonbitlang/core/int",
+  "moonbitlang/core/option",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"

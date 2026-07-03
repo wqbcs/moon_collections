@@ -1,0 +1,17 @@
+import {
+  "moonbitlang/core/int",
+  "moonbitlang/core/uint64",
+  "wqbcs/moon_collections/traits",
+  "wqbcs/moon_collections/fingerprint" @fp,
+  "wqbcs/moon_collections/indexmap",
+  "wqbcs/moon_collections/bitmask",
+  "wqbcs/moon_collections/counter",
+  "wqbcs/moon_collections/defaultmap",
+  "wqbcs/moon_collections/compactintmap",
+  "wqbcs/moon_collections/convert",
+  "wqbcs/moon_collections/diff",
+  "wqbcs/moon_collections/disjointset",
+  "wqbcs/moon_collections/ringbuffer",
+  "wqbcs/moon_collections/sparseset",
+  "wqbcs/moon_collections/sortedmap",
+}

@@ -1,0 +1,48 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/moon_collections/sparseset"
+
+import {
+  "moonbitlang/core/debug",
+  "username/moon_collections/traits",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct SparseSet[V] {
+  sparse : Array[Int]
+  dense : Array[Int]
+  values : Array[V?]
+  mut count : Int
+  capacity : Int
+  mut fp_cache : UInt64
+  mut fp_dirty : Bool
+}
+pub fn[V] SparseSet::capacity(Self[V]) -> Int
+pub fn[V] SparseSet::clear(Self[V]) -> Unit
+pub fn[V] SparseSet::contains(Self[V], Int) -> Bool
+pub fn[V : Eq] SparseSet::contains_value(Self[V], V) -> Bool
+pub fn[V] SparseSet::each(Self[V], (Int, V) -> Unit) -> Unit
+pub fn[V] SparseSet::each_index(Self[V], (Int) -> Unit) -> Unit
+pub fn[V] SparseSet::from_array(Int, Array[(Int, V)]) -> Self[V]
+pub fn[V] SparseSet::get(Self[V], Int) -> V?
+pub fn[V] SparseSet::insert(Self[V], Int, V) -> V?
+pub fn[V] SparseSet::is_empty(Self[V]) -> Bool
+pub fn[V] SparseSet::iter(Self[V]) -> Iter[(Int, V)]
+pub fn[V] SparseSet::keys_array(Self[V]) -> Array[Int]
+pub fn[V] SparseSet::len(Self[V]) -> Int
+pub fn[V] SparseSet::new(Int) -> Self[V]
+pub fn[V] SparseSet::remove(Self[V], Int) -> V?
+pub fn[V] SparseSet::update(Self[V], Int, (V) -> V) -> Bool
+pub fn[V : Eq] SparseSet::value_eq(Self[V], Int, V) -> Bool
+pub fn[V] SparseSet::values_array(Self[V]) -> Array[V]
+pub impl[V : @debug.Debug] @debug.Debug for SparseSet[V]
+pub impl[V] @traits.Collection for SparseSet[V]
+pub impl[V : Hash + Eq] @traits.Deterministic for SparseSet[V]
+
+// Type aliases
+
+// Traits
+

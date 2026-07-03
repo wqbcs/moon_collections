@@ -1,0 +1,14 @@
+import {
+  "moonbitlang/core/hashmap",
+  "moonbitlang/core/array",
+  "moonbitlang/core/option",
+  "moonbitlang/core/int",
+  "moonbitlang/core/bool",
+  "moonbitlang/core/uint64",
+  "wqbcs/moon_collections/traits",
+  "wqbcs/moon_collections/fingerprint" @fp,
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"

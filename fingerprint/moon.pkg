@@ -1,0 +1,10 @@
+import {
+  "moonbitlang/core/int",
+  "moonbitlang/core/uint64",
+  "moonbitlang/core/string",
+  "moonbitlang/core/array",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"

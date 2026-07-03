@@ -1,0 +1,40 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/moon_collections/disjointset"
+
+import {
+  "moonbitlang/core/debug",
+  "username/moon_collections/traits",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct DisjointSet {
+  parent : Array[Int]
+  rank : Array[Int]
+  mut count : Int
+  mut fp_cache : UInt64
+  mut fp_dirty : Bool
+}
+pub fn DisjointSet::all_components(Self) -> Array[Array[Int]]
+pub fn DisjointSet::clear(Self) -> Unit
+pub fn DisjointSet::component_count(Self) -> Int
+pub fn DisjointSet::component_size(Self, Int) -> Int
+pub fn DisjointSet::connected(Self, Int, Int) -> Bool
+pub fn DisjointSet::find(Self, Int) -> Int
+pub fn DisjointSet::from_array(Int, Array[(Int, Int)]) -> Self
+pub fn DisjointSet::is_empty(Self) -> Bool
+pub fn DisjointSet::len(Self) -> Int
+pub fn DisjointSet::new(Int) -> Self
+pub fn DisjointSet::size(Self) -> Int
+pub fn DisjointSet::union(Self, Int, Int) -> Bool
+pub impl @debug.Debug for DisjointSet
+pub impl @traits.Collection for DisjointSet
+pub impl @traits.Deterministic for DisjointSet
+
+// Type aliases
+
+// Traits
+
