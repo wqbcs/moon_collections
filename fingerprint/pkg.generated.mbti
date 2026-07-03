@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "username/moon_collections/fingerprint"
+package "wqbcs/moon_collections/fingerprint"
 
 import {
   "moonbitlang/core/debug",

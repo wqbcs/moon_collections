@@ -1,10 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "username/moon_collections/counter"
+package "wqbcs/moon_collections/counter"
 
 import {
   "moonbitlang/core/debug",
-  "username/moon_collections/indexmap",
-  "username/moon_collections/traits",
+  "wqbcs/moon_collections/indexmap",
+  "wqbcs/moon_collections/traits",
 }
 
 // Values

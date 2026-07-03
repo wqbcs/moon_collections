@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "username/moon_collections/sortedmap"
+package "wqbcs/moon_collections/sortedmap"
 
 import {
   "moonbitlang/core/debug",
-  "username/moon_collections/traits",
+  "wqbcs/moon_collections/traits",
 }
 
 // Values
@@ -16,11 +16,15 @@ pub struct SortedMap[K, V] {
   mut fp_cache : UInt64
   mut fp_dirty : Bool
 }
+pub fn[K : Compare, V] SortedMap::ceil(Self[K, V], K) -> (K, V)?
 pub fn[K, V] SortedMap::clear(Self[K, V]) -> Unit
+pub fn[K : Compare, V] SortedMap::clone(Self[K, V]) -> Self[K, V]
 pub fn[K : Compare, V] SortedMap::contains(Self[K, V], K) -> Bool
 pub fn[K, V] SortedMap::each(Self[K, V], (K, V) -> Unit) -> Unit
-pub fn[K : Compare, V] SortedMap::filter(Self[K, V], (K, V) -> Bool) -> Self[K, V]
+pub fn[K, V] SortedMap::filter(Self[K, V], (K, V) -> Bool) -> Self[K, V]
+pub fn[K : Compare, V] SortedMap::floor(Self[K, V], K) -> (K, V)?
 pub fn[K : Compare, V] SortedMap::from_array(Array[(K, V)]) -> Self[K, V]
+pub fn[K, V] SortedMap::from_sorted_entries(Array[(K, V)]) -> Self[K, V]
 pub fn[K : Compare, V] SortedMap::get(Self[K, V], K) -> V?
 pub fn[K : Compare, V] SortedMap::get_or_insert(Self[K, V], K, V) -> V
 pub fn[K : Compare, V] SortedMap::get_or_insert_with(Self[K, V], K, () -> V) -> V
@@ -31,13 +35,14 @@ pub fn[K, V] SortedMap::keys(Self[K, V]) -> Iter[K]
 pub fn[K, V] SortedMap::keys_array(Self[K, V]) -> Array[K]
 pub fn[K, V] SortedMap::len(Self[K, V]) -> Int
 pub fn[K : Compare, V] SortedMap::lower_bound(Self[K, V], K) -> (K, V)?
-pub fn[K : Compare, V, R] SortedMap::map_values(Self[K, V], (V) -> R) -> Self[K, R]
+pub fn[K, V, R] SortedMap::map_values(Self[K, V], (V) -> R) -> Self[K, R]
 pub fn[K, V] SortedMap::max_key(Self[K, V]) -> K?
 pub fn[K : Compare, V] SortedMap::merge(Self[K, V], Self[K, V], (V, V) -> V) -> Self[K, V]
 pub fn[K, V] SortedMap::min_key(Self[K, V]) -> K?
 pub fn[K, V] SortedMap::new() -> Self[K, V]
 pub fn[K : Compare, V] SortedMap::range(Self[K, V], K, K) -> Array[(K, V)]
 pub fn[K : Compare, V] SortedMap::remove(Self[K, V], K) -> V?
+pub fn[K, V] SortedMap::retain(Self[K, V], (K, V) -> Bool) -> Unit
 pub fn[K, V] SortedMap::to_array(Self[K, V]) -> Array[(K, V)]
 pub fn[K : Compare, V] SortedMap::update(Self[K, V], K, (V) -> V) -> Bool
 pub fn[K : Compare, V] SortedMap::upper_bound(Self[K, V], K) -> (K, V)?

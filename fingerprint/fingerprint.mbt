@@ -12,11 +12,12 @@ pub fn fnv1a_hash_byte(byte : Int, hash : UInt64) -> UInt64 {
 ///|
 pub fn fnv1a_hash_int(value : Int, hash : UInt64) -> UInt64 {
   let mut h = hash
-  let mut v = value
+  let mut uv = value.to_uint64()
   let mut i = 0
   while i < 8 {
-    h = fnv1a_hash_byte(v % 256, h)
-    v = v / 256
+    let byte = (uv & 0xFFUL).to_int()
+    h = fnv1a_hash_byte(byte, h)
+    uv = uv >> 8
     i = i + 1
   }
   h

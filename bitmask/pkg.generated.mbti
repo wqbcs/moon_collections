@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "username/moon_collections/bitmask"
+package "wqbcs/moon_collections/bitmask"
 
 import {
   "moonbitlang/core/debug",
-  "username/moon_collections/traits",
+  "wqbcs/moon_collections/traits",
 }
 
 // Values
@@ -62,16 +62,22 @@ pub fn BitSet::contains(Self, Int) -> Bool
 pub fn BitSet::count_ones(Self) -> Int
 pub fn BitSet::count_zeros(Self) -> Int
 pub fn BitSet::difference(Self, Self) -> Self
+pub fn BitSet::difference_with(Self, Self) -> Unit
 pub fn BitSet::extend(Self, Int) -> Unit
 pub fn BitSet::first_one(Self) -> Int?
+pub fn BitSet::first_zero(Self) -> Int?
 pub fn BitSet::from_indices(Array[Int]) -> Self
 pub fn BitSet::intersect(Self, Self) -> Self
+pub fn BitSet::intersect_with(Self, Self) -> Unit
 pub fn BitSet::is_disjoint(Self, Self) -> Bool
 pub fn BitSet::is_empty(Self) -> Bool
 pub fn BitSet::is_strict_subset(Self, Self) -> Bool
 pub fn BitSet::is_subset(Self, Self) -> Bool
 pub fn BitSet::is_superset(Self, Self) -> Bool
+pub fn BitSet::iter_ones(Self) -> Iter[Int]
+pub fn BitSet::iter_zeros(Self) -> Iter[Int]
 pub fn BitSet::last_one(Self) -> Int?
+pub fn BitSet::last_zero(Self) -> Int?
 pub fn BitSet::length(Self) -> Int
 pub fn BitSet::new(Int) -> Self
 pub fn BitSet::next_one(Self, Int) -> Int?
@@ -86,6 +92,7 @@ pub fn BitSet::to_indices(Self) -> Array[Int]
 pub fn BitSet::toggle(Self, Int) -> Unit
 pub fn BitSet::truncate(Self, Int) -> Unit
 pub fn BitSet::union(Self, Self) -> Self
+pub fn BitSet::union_with(Self, Self) -> Unit
 pub impl @debug.Debug for BitSet
 pub impl @traits.Collection for BitSet
 pub impl @traits.Deterministic for BitSet

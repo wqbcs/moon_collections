@@ -1,10 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "username/moon_collections/indexmap"
+package "wqbcs/moon_collections/indexmap"
 
 import {
   "moonbitlang/core/debug",
   "moonbitlang/core/hashmap",
-  "username/moon_collections/traits",
+  "wqbcs/moon_collections/traits",
 }
 
 // Values
@@ -25,7 +25,9 @@ pub struct IndexMap[K, V] {
 }
 pub fn[K : Hash + Eq, V] IndexMap::at(Self[K, V], K) -> V?
 pub fn[K : Hash + Eq, V] IndexMap::clear(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::clone(Self[K, V]) -> Self[K, V]
 pub fn[K : Hash + Eq, V] IndexMap::contains(Self[K, V], K) -> Bool
+pub fn[K : Hash + Eq, V] IndexMap::drain(Self[K, V], (K, V) -> Bool) -> Self[K, V]
 pub fn[K, V] IndexMap::each(Self[K, V], (K, V) -> Unit) -> Unit
 pub fn[K, V] IndexMap::entries(Self[K, V]) -> Array[Entry[K, V]]
 pub fn[K : Hash + Eq, V] IndexMap::filter(Self[K, V], (K, V) -> Bool) -> Self[K, V]
@@ -38,6 +40,8 @@ pub fn[K, V] IndexMap::get_key_at(Self[K, V], Int) -> K?
 pub fn[K : Hash + Eq, V] IndexMap::get_or_insert(Self[K, V], K, V) -> V
 pub fn[K : Hash + Eq, V] IndexMap::get_or_insert_with(Self[K, V], K, () -> V) -> V
 pub fn[K, V] IndexMap::get_value_at(Self[K, V], Int) -> V?
+pub fn[K : Hash + Eq, V] IndexMap::has_all(Self[K, V], Array[K]) -> Bool
+pub fn[K : Hash + Eq, V] IndexMap::has_any(Self[K, V], Array[K]) -> Bool
 pub fn[K : Hash + Eq, V] IndexMap::insert(Self[K, V], K, V) -> V?
 pub fn[K : Hash + Eq, V] IndexMap::insert_after(Self[K, V], K, K, V) -> Bool
 pub fn[K : Hash + Eq, V] IndexMap::insert_before(Self[K, V], K, K, V) -> Bool
@@ -83,6 +87,7 @@ pub struct IndexSet[K] {
   map : IndexMap[K, Unit]
 } derive(@debug.Debug)
 pub fn[K : Hash + Eq] IndexSet::clear(Self[K]) -> Unit
+pub fn[K : Hash + Eq] IndexSet::clone(Self[K]) -> Self[K]
 pub fn[K : Hash + Eq] IndexSet::contains(Self[K], K) -> Bool
 pub fn[K : Hash + Eq] IndexSet::difference(Self[K], Self[K]) -> Self[K]
 pub fn[K] IndexSet::each(Self[K], (K) -> Unit) -> Unit

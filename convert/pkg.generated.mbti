@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "username/moon_collections/convert"
+package "wqbcs/moon_collections/convert"
 
 import {
-  "username/moon_collections/indexmap",
-  "username/moon_collections/sortedmap",
+  "wqbcs/moon_collections/indexmap",
+  "wqbcs/moon_collections/sortedmap",
 }
 
 // Values

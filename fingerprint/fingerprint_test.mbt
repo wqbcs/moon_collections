@@ -102,3 +102,17 @@ test "rolling_fingerprint_reset" {
   assert_true(rf.is_empty())
   assert_true(rf.hash() == @fingerprint.fnv_offset_basis)
 }
+
+///|
+test "fnv1a_hash_negative_int_consistency" {
+  // Negative values must hash to the same value every time
+  let h1 = @fingerprint.fnv1a_hash_int(-1, @fingerprint.fnv_offset_basis)
+  let h2 = @fingerprint.fnv1a_hash_int(-1, @fingerprint.fnv_offset_basis)
+  assert_true(h1 == h2)
+  // Different negative values produce different hashes
+  let h3 = @fingerprint.fnv1a_hash_int(-2, @fingerprint.fnv_offset_basis)
+  assert_true(h1 != h3)
+  // Zero hashes to fnv_offset_basis applied to 8 zero bytes
+  let h_zero = @fingerprint.fnv1a_hash_int(0, @fingerprint.fnv_offset_basis)
+  assert_true(h_zero != 0UL)
+}

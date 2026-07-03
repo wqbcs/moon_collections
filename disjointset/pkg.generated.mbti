@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "username/moon_collections/disjointset"
+package "wqbcs/moon_collections/disjointset"
 
 import {
   "moonbitlang/core/debug",
-  "username/moon_collections/traits",
+  "wqbcs/moon_collections/traits",
 }
 
 // Values
@@ -14,6 +14,7 @@ import {
 pub struct DisjointSet {
   parent : Array[Int]
   rank : Array[Int]
+  size : Array[Int]
   mut count : Int
   mut fp_cache : UInt64
   mut fp_dirty : Bool
@@ -21,6 +22,7 @@ pub struct DisjointSet {
 pub fn DisjointSet::all_components(Self) -> Array[Array[Int]]
 pub fn DisjointSet::clear(Self) -> Unit
 pub fn DisjointSet::component_count(Self) -> Int
+pub fn DisjointSet::component_elements(Self, Int) -> Array[Int]
 pub fn DisjointSet::component_size(Self, Int) -> Int
 pub fn DisjointSet::connected(Self, Int, Int) -> Bool
 pub fn DisjointSet::find(Self, Int) -> Int

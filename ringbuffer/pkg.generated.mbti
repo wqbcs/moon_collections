@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "username/moon_collections/ringbuffer"
+package "wqbcs/moon_collections/ringbuffer"
 
 import {
   "moonbitlang/core/debug",
-  "username/moon_collections/traits",
+  "wqbcs/moon_collections/traits",
 }
 
 // Values
@@ -28,6 +28,7 @@ pub fn[T : Eq] RingBuffer::count_item(Self[T], T) -> Int
 pub fn[T] RingBuffer::drain(Self[T], Int) -> Array[T]
 pub fn[T] RingBuffer::each(Self[T], (T) -> Unit) -> Unit
 pub fn[T] RingBuffer::extend(Self[T], Array[T]) -> Unit
+pub fn[T : Eq] RingBuffer::find_last(Self[T], T) -> Int?
 pub fn[T] RingBuffer::from_array(Array[T]) -> Self[T]
 pub fn[T] RingBuffer::front(Self[T]) -> T?
 pub fn[T] RingBuffer::get(Self[T], Int) -> T?
@@ -48,6 +49,7 @@ pub fn[T] RingBuffer::rotate_left(Self[T], Int) -> Unit
 pub fn[T] RingBuffer::rotate_right(Self[T], Int) -> Unit
 pub fn[T] RingBuffer::set(Self[T], Int, T) -> Bool
 pub fn[T] RingBuffer::skip(Self[T], Int) -> Array[T]
+pub fn[T : Compare] RingBuffer::sort(Self[T]) -> Unit
 pub fn[T] RingBuffer::take(Self[T], Int) -> Array[T]
 pub fn[T] RingBuffer::to_array(Self[T]) -> Array[T]
 pub impl[T : Eq] Eq for RingBuffer[T]

@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "username/moon_collections/sparseset"
+package "wqbcs/moon_collections/sparseset"
 
 import {
   "moonbitlang/core/debug",
-  "username/moon_collections/traits",
+  "wqbcs/moon_collections/traits",
 }
 
 // Values
