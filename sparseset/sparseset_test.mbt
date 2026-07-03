@@ -108,3 +108,45 @@ test "sparseset_iter" {
   let items = ss.iter().to_array()
   assert_true(items.length() == 2)
 }
+
+///|
+test "sparseset_value_eq" {
+  let ss = @sparseset.SparseSet::new(10)
+  ignore(ss.insert(1, "hello"))
+  assert_true(ss.value_eq(1, "hello"))
+  assert_true(!ss.value_eq(1, "world"))
+  assert_true(!ss.value_eq(99, "hello"))
+}
+
+///|
+test "sparseset_update" {
+  let ss = @sparseset.SparseSet::new(10)
+  ignore(ss.insert(5, "start"))
+  assert_true(ss.update(5, fn(v : String) -> String { v + "_updated" }))
+  assert_true(ss.get(5) == Some("start_updated"))
+  assert_true(!ss.update(99, fn(v : String) -> String { v }))
+}
+
+///|
+test "sparseset_contains_value" {
+  let ss = @sparseset.SparseSet::new(10)
+  ignore(ss.insert(1, "apple"))
+  ignore(ss.insert(2, "banana"))
+  assert_true(ss.contains_value("apple"))
+  assert_true(ss.contains_value("banana"))
+  assert_true(!ss.contains_value("cherry"))
+}
+
+///|
+test "sparseset_each_index" {
+  let ss = @sparseset.SparseSet::new(10)
+  ignore(ss.insert(3, "c"))
+  ignore(ss.insert(1, "a"))
+  ignore(ss.insert(2, "b"))
+  let indices : Array[Int] = []
+  ss.each_index(fn(k : Int) -> Unit { indices.push(k) })
+  assert_true(indices.length() == 3)
+  assert_true(indices[0] == 3)
+  assert_true(indices[1] == 1)
+  assert_true(indices[2] == 2)
+}

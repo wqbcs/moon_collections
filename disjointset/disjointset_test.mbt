@@ -137,6 +137,23 @@ test "disjointset_single_element" {
 }
 
 ///|
+test "disjointset_component_elements" {
+  let ds = DisjointSet::new(5)
+  ignore(ds.union(0, 1))
+  ignore(ds.union(0, 2))
+  ignore(ds.union(3, 4))
+  let comp_a = ds.component_elements(0)
+  assert_true(comp_a.length() == 3)
+  assert_true(comp_a.contains(0))
+  assert_true(comp_a.contains(2))
+  let comp_b = ds.component_elements(3)
+  assert_true(comp_b.length() == 2)
+  assert_true(comp_b.contains(4))
+  let comp_c = ds.component_elements(99)
+  assert_true(comp_c.length() == 0)
+}
+
+///|
 test "disjointset_logical_equivalence" {
   // Two DisjointSets with same logical structure but different
   // union sequences must produce identical fingerprints.

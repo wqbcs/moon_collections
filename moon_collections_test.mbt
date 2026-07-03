@@ -235,7 +235,11 @@ test "sortedmap_retain" {
 
 ///|
 test "compactintmap_retain" {
-  let m = @compactintmap.CompactIntMap::from_array([(1, "a"), (2, "b"), (3, "c")])
+  let m = @compactintmap.CompactIntMap::from_array([
+    (1, "a"),
+    (2, "b"),
+    (3, "c"),
+  ])
   m.retain(fn(k : Int, _v : String) -> Bool { k > 1 })
   assert_true(m.len() == 2)
   assert_true(m.contains(2))
@@ -255,7 +259,12 @@ test "indexmap_has_all_any" {
 
 ///|
 test "indexmap_drain" {
-  let m = @indexmap.IndexMap::from_array([("a", 1), ("b", 2), ("c", 3), ("d", 4)])
+  let m = @indexmap.IndexMap::from_array([
+    ("a", 1),
+    ("b", 2),
+    ("c", 3),
+    ("d", 4),
+  ])
   let drained = m.drain(fn(_k : String, v : Int) -> Bool { v % 2 == 0 })
   assert_true(drained.len() == 2)
   assert_true(drained.contains("b"))

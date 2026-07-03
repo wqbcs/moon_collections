@@ -237,3 +237,19 @@ test "counter_most_common_zero" {
   let c = @counter.Counter::from_array(["a", "b"])
   assert_true(c.most_common(0).length() == 0)
 }
+
+///|
+test "counter_from_array_with_weight" {
+  let c = @counter.Counter::from_array_with_weight([("a", 3), ("b", 2), ("a", 1)])
+  assert_true(c.get("a") == 4)
+  assert_true(c.get("b") == 2)
+  assert_true(c.total() == 6)
+}
+
+///|
+test "counter_from_array_with_weight_zero" {
+  // Items with weight 0 should not be stored
+  let c = @counter.Counter::from_array_with_weight([("a", 5), ("b", 0)])
+  assert_true(c.get("a") == 5)
+  assert_true(!c.contains("b"))
+}

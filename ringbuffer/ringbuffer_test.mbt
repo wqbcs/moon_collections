@@ -273,3 +273,26 @@ test "ringbuffer_iter" {
   let items = rb.iter().to_array()
   assert_true(items == [1, 2, 3])
 }
+
+///|
+test "ringbuffer_sort" {
+  let rb = @ringbuffer.RingBuffer::from_array([3, 1, 4, 1, 5])
+  rb.sort()
+  assert_true(rb.to_array() == [1, 1, 3, 4, 5])
+}
+
+///|
+test "ringbuffer_sort_single" {
+  let rb = @ringbuffer.RingBuffer::from_array([42])
+  rb.sort()
+  assert_true(rb.to_array() == [42])
+}
+
+///|
+test "ringbuffer_find_last" {
+  let rb = @ringbuffer.RingBuffer::from_array([1, 2, 3, 2, 1])
+  assert_true(rb.find_last(1) == Some(4))
+  assert_true(rb.find_last(2) == Some(3))
+  assert_true(rb.find_last(3) == Some(2))
+  assert_true(rb.find_last(99) == None)
+}
