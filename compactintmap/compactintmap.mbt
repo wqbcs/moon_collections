@@ -194,6 +194,38 @@ pub fn[V] CompactIntMap::values_array(self : CompactIntMap[V]) -> Array[V] {
 }
 
 ///|
+pub fn[V] CompactIntMap::floor_key(self : CompactIntMap[V], key : Int) -> Int? {
+  if self.entries.length() == 0 {
+    return None
+  }
+  let idx = CompactIntMap::binary_search(self, key)
+  if idx >= 0 {
+    Some(self.entries[idx].0)
+  } else {
+    let insert_pos = -(idx + 1)
+    if insert_pos > 0 {
+      Some(self.entries[insert_pos - 1].0)
+    } else {
+      None
+    }
+  }
+}
+
+///|
+pub fn[V] CompactIntMap::ceil_key(self : CompactIntMap[V], key : Int) -> Int? {
+  if self.entries.length() == 0 {
+    return None
+  }
+  let idx = CompactIntMap::binary_search(self, key)
+  let pos = if idx >= 0 { idx } else { -(idx + 1) }
+  if pos < self.entries.length() {
+    Some(self.entries[pos].0)
+  } else {
+    None
+  }
+}
+
+///|
 pub fn[V] CompactIntMap::each(
   self : CompactIntMap[V],
   f : (Int, V) -> Unit,

@@ -230,3 +230,20 @@ pub fn DisjointSet::all_components(self : DisjointSet) -> Array[Array[Int]] {
   }
   result
 }
+
+///|
+pub fn DisjointSet::component_elements(self : DisjointSet, x : Int) -> Array[Int] {
+  let root = DisjointSet::find(self, x)
+  if root == -1 {
+    return []
+  }
+  let result : Array[Int] = []
+  let mut i = 0
+  while i < self.parent.length() {
+    if DisjointSet::find(self, i) == root {
+      result.push(i)
+    }
+    i = i + 1
+  }
+  result
+}
