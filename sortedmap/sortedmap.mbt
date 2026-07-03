@@ -29,6 +29,11 @@ pub fn[K : Compare, V] SortedMap::from_array(
 }
 
 ///|
+pub fn[K : Compare, V] SortedMap::clone(self : SortedMap[K, V]) -> SortedMap[K, V] {
+  SortedMap::from_array(SortedMap::to_array(self))
+}
+
+///|
 fn[K : Compare, V] SortedMap::binary_search(
   self : SortedMap[K, V],
   key : K,

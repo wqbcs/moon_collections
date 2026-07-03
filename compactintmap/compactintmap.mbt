@@ -25,6 +25,11 @@ pub fn[V] CompactIntMap::from_array(
 }
 
 ///|
+pub fn[V] CompactIntMap::clone(self : CompactIntMap[V]) -> CompactIntMap[V] {
+  CompactIntMap::from_array(CompactIntMap::to_array(self))
+}
+
+///|
 fn[V] CompactIntMap::binary_search(self : CompactIntMap[V], key : Int) -> Int {
   let mut lo = 0
   let mut hi = self.entries.length() - 1

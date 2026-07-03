@@ -417,6 +417,11 @@ pub fn[K : Hash + Eq, V] IndexMap::from_array(
 }
 
 ///|
+pub fn[K : Hash + Eq, V] IndexMap::clone(self : IndexMap[K, V]) -> IndexMap[K, V] {
+  IndexMap::from_array(IndexMap::to_array(self))
+}
+
+///|
 pub fn[K, V] IndexMap::entries(self : IndexMap[K, V]) -> Array[Entry[K, V]] {
   let result : Array[Entry[K, V]] = []
   let mut i = 0

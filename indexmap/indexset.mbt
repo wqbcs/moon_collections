@@ -178,6 +178,11 @@ pub fn[K : Hash + Eq] IndexSet::from_array(items : Array[K]) -> IndexSet[K] {
 }
 
 ///|
+pub fn[K : Hash + Eq] IndexSet::clone(self : IndexSet[K]) -> IndexSet[K] {
+  IndexSet::from_array(IndexSet::to_array(self))
+}
+
+///|
 pub fn[K] IndexSet::to_array(self : IndexSet[K]) -> Array[K] {
   self.map.keys_array()
 }
