@@ -780,3 +780,34 @@ pub fn[K : Hash + Eq, V] IndexMap::merge(
   })
   result
 }
+
+///|
+pub fn[K : Hash + Eq, V] IndexMap::drain(self : IndexMap[K, V], pred : (K, V) -> Bool) -> IndexMap[K, V] {
+  let drained = IndexMap::filter(self, pred)
+  IndexMap::retain(self, fn(k : K, v : V) -> Bool { !pred(k, v) })
+  drained
+}
+
+///|
+pub fn[K : Hash + Eq, V] IndexMap::has_all(self : IndexMap[K, V], keys : Array[K]) -> Bool {
+  let mut i = 0
+  while i < keys.length() {
+    if !self.contains(keys[i]) {
+      return false
+    }
+    i = i + 1
+  }
+  true
+}
+
+///|
+pub fn[K : Hash + Eq, V] IndexMap::has_any(self : IndexMap[K, V], keys : Array[K]) -> Bool {
+  let mut i = 0
+  while i < keys.length() {
+    if self.contains(keys[i]) {
+      return true
+    }
+    i = i + 1
+  }
+  false
+}
