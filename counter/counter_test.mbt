@@ -240,7 +240,11 @@ test "counter_most_common_zero" {
 
 ///|
 test "counter_from_array_with_weight" {
-  let c = @counter.Counter::from_array_with_weight([("a", 3), ("b", 2), ("a", 1)])
+  let c = @counter.Counter::from_array_with_weight([
+    ("a", 3),
+    ("b", 2),
+    ("a", 1),
+  ])
   assert_true(c.get("a") == 4)
   assert_true(c.get("b") == 2)
   assert_true(c.total() == 6)
