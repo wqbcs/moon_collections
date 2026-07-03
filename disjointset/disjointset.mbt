@@ -147,6 +147,8 @@ pub impl @traits.Deterministic for DisjointSet with fn fingerprint(self) -> UInt
     ignore(DisjointSet::find(self, i))
     i = i + 1
   }
+  // Canonicalize: relabel roots so the minimum element in each component is the root
+  DisjointSet::canonicalize_roots(self)
   let mut h = @fp.fnv_offset_basis
   h = @fp.fnv1a_hash_int(self.count, h)
   i = 0
@@ -159,6 +161,57 @@ pub impl @traits.Deterministic for DisjointSet with fn fingerprint(self) -> UInt
   self.fp_cache = h
   self.fp_dirty = false
   h
+}
+
+///|
+fn DisjointSet::canonicalize_roots(self : DisjointSet) -> Unit {
+  // After full path compression, relabel roots so the minimum element
+  // in each component is the root. This guarantees logically equivalent
+  // DisjointSets (same components) produce identical fingerprints
+  // regardless of the union sequence that created them.
+  let n = self.parent.length()
+  // Find the minimum element for each component root
+  let min_in_comp : Array[Int] = Array::makei(n, fn(i) -> Int { i })
+  let mut i = 0
+  while i < n {
+    let root = self.parent[i]
+    if i < min_in_comp[root] {
+      min_in_comp[root] = i
+    }
+    i = i + 1
+  }
+  // Reassign all elements to their canonical root and transfer state
+  i = 0
+  while i < n {
+    let root = self.parent[i]
+    let new_root = min_in_comp[root]
+    if new_root != root {
+      if i == root {
+        // This is the old root: transfer size to new root
+        self.size[new_root] = self.size[root]
+      }
+      self.parent[i] = new_root
+    }
+    i = i + 1
+  }
+  // Reset stale sizes: non-root elements get size 1, ranks all 0
+  i = 0
+  while i < n {
+    if self.parent[i] != i {
+      self.size[i] = 1
+    }
+    self.rank[i] = 0
+    i = i + 1
+  }
+  // Ensure the canonical root points to itself (not a stale old root)
+  i = 0
+  while i < n {
+    let r = min_in_comp[i]
+    if r != i && self.parent[r] == i {
+      self.parent[r] = r
+    }
+    i = i + 1
+  }
 }
 
 ///|
@@ -180,6 +233,9 @@ pub impl @traits.Deterministic for DisjointSet with fn ordered_eq(self, other) -
     ignore(DisjointSet::find(other, i))
     i = i + 1
   }
+  // Canonicalize both sets to ensure logical equivalence comparison
+  DisjointSet::canonicalize_roots(self)
+  DisjointSet::canonicalize_roots(other)
   i = 0
   while i < n {
     if self.parent[i] != other.parent[i] {

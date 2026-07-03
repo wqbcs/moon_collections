@@ -561,6 +561,9 @@ pub fn BitSet::intersect_with(self : BitSet, other : BitSet) -> Unit {
     }
     i = i + 1
   }
+  if other.len < self.len {
+    self.len = other.len
+  }
   self.fp_dirty = true
 }
 

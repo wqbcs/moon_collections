@@ -135,3 +135,27 @@ test "disjointset_single_element" {
   assert_true(ds.component_count() == 1)
   assert_true(ds.len() == 1)
 }
+
+///|
+test "disjointset_logical_equivalence" {
+  // Two DisjointSets with same logical structure but different
+  // union sequences must produce identical fingerprints.
+  let ds1 = DisjointSet::new(4)
+  ignore(ds1.union(0, 1))
+  ignore(ds1.union(2, 3))
+  ignore(ds1.union(0, 2))
+  // ds1: all 4 elements in one component via (0-1, 2-3, 0-2)
+
+  let ds2 = DisjointSet::new(4)
+  ignore(ds2.union(1, 2))
+  ignore(ds2.union(2, 3))
+  ignore(ds2.union(0, 3))
+  // ds2: all 4 elements in one component via (1-2, 2-3, 0-3)
+
+  assert_true(ds1.connected(0, 3))
+  assert_true(ds2.connected(0, 3))
+  assert_true(ds1.component_count() == 1)
+  assert_true(ds2.component_count() == 1)
+  assert_true(ds1.fingerprint() == ds2.fingerprint())
+  assert_true(ds1.ordered_eq(ds2))
+}
