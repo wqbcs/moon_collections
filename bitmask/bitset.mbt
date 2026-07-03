@@ -4,7 +4,22 @@ pub struct BitSet {
   mut len : Int
   mut fp_cache : UInt64
   mut fp_dirty : Bool
-} derive(Eq)
+}
+
+///|
+pub impl Eq for BitSet with fn equal(self, other) -> Bool {
+  if self.len != other.len {
+    return false
+  }
+  let mut i = 0
+  while i < self.bits.length() {
+    if self.bits[i] != other.bits[i] {
+      return false
+    }
+    i = i + 1
+  }
+  true
+}
 
 ///|
 pub impl Debug for BitSet with fn to_repr(self) -> Repr {
