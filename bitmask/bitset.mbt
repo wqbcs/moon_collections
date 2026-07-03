@@ -474,6 +474,104 @@ pub fn BitSet::all_set(self : BitSet) -> Bool {
 }
 
 ///|
+pub fn BitSet::first_zero(self : BitSet) -> Int? {
+  let mut i = 0
+  while i < self.len {
+    if !BitSet::contains(self, i) {
+      return Some(i)
+    }
+    i = i + 1
+  }
+  None
+}
+
+///|
+pub fn BitSet::last_zero(self : BitSet) -> Int? {
+  if self.len == 0 {
+    return None
+  }
+  let mut i = self.len - 1
+  while i >= 0 {
+    if !BitSet::contains(self, i) {
+      return Some(i)
+    }
+    i = i - 1
+  }
+  None
+}
+
+///|
+pub fn BitSet::iter_ones(self : BitSet) -> Iter[Int] {
+  BitSet::to_indices(self).iter()
+}
+
+///|
+pub fn BitSet::iter_zeros(self : BitSet) -> Iter[Int] {
+  let result : Array[Int] = []
+  let mut i = 0
+  while i < self.len {
+    if !BitSet::contains(self, i) {
+      result.push(i)
+    }
+    i = i + 1
+  }
+  result.iter()
+}
+
+///|
+pub fn BitSet::union_with(self : BitSet, other : BitSet) -> Unit {
+  let max_len = if self.bits.length() > other.bits.length() {
+    self.bits.length()
+  } else {
+    other.bits.length()
+  }
+  while self.bits.length() < max_len {
+    self.bits.push(0UL)
+  }
+  let mut i = 0
+  while i < other.bits.length() {
+    self.bits[i] = self.bits[i] | other.bits[i]
+    i = i + 1
+  }
+  if other.len > self.len {
+    self.len = other.len
+  }
+  self.fp_dirty = true
+}
+
+///|
+pub fn BitSet::intersect_with(self : BitSet, other : BitSet) -> Unit {
+  let mut i = 0
+  while i < self.bits.length() {
+    if i < other.bits.length() {
+      self.bits[i] = self.bits[i] & other.bits[i]
+    } else {
+      self.bits[i] = 0UL
+    }
+    i = i + 1
+  }
+  self.fp_dirty = true
+}
+
+///|
+pub fn BitSet::difference_with(self : BitSet, other : BitSet) -> Unit {
+  let max_len = if self.bits.length() > other.bits.length() {
+    self.bits.length()
+  } else {
+    other.bits.length()
+  }
+  while self.bits.length() < max_len {
+    self.bits.push(0UL)
+  }
+  let mut i = 0
+  while i < other.bits.length() {
+    self.bits[i] = self.bits[i] & other.bits[i].lnot()
+    i = i + 1
+  }
+  self.fp_dirty = true
+}
+
+///|
 pub impl @traits.Collection for BitSet with fn len(self) -> Int {
   self.len
 }
