@@ -190,21 +190,12 @@ pub fn[K : Compare, V] SortedMap::range(
   from : K,
   to : K,
 ) -> Array[(K, V)] {
-  if self.entries.length() == 0 {
+  if self.entries.length() == 0 || from.compare(to) > 0 {
     return []
   }
-  // Use binary search to find the start index (first key >= from)
-  let mut lo = 0
-  let mut hi = self.entries.length()
-  while lo < hi {
-    let mid = lo + (hi - lo) / 2
-    let (k, _) = self.entries[mid]
-    if k.compare(from) < 0 {
-      lo = mid + 1
-    } else {
-      hi = mid
-    }
-  }
+  // Use binary_search to find the start index (first key >= from)
+  let idx = SortedMap::binary_search(self, from)
+  let lo = if idx >= 0 { idx } else { -(idx + 1) }
   if lo >= self.entries.length() {
     return []
   }
@@ -274,35 +265,34 @@ pub fn[K : Compare, V] SortedMap::ceil(
 }
 
 ///|
-pub fn[K : Compare, V] SortedMap::filter(
+pub fn[K, V] SortedMap::filter(
   self : SortedMap[K, V],
   pred : (K, V) -> Bool,
 ) -> SortedMap[K, V] {
-  let result = SortedMap::new()
+  let new_entries : Array[(K, V)] = []
   let mut i = 0
   while i < self.entries.length() {
     let (k, v) = self.entries[i]
     if pred(k, v) {
-      ignore(SortedMap::insert(result, k, v))
+      new_entries.push((k, v))
     }
     i = i + 1
   }
-  result
+  { entries: new_entries, fp_cache: 0UL, fp_dirty: true }
 }
 
 ///|
-pub fn[K : Compare, V, R] SortedMap::map_values(
+pub fn[K, V, R] SortedMap::map_values(
   self : SortedMap[K, V],
   f : (V) -> R,
 ) -> SortedMap[K, R] {
-  let result = SortedMap::new()
+  let new_entries : Array[(K, R)] = []
   let mut i = 0
   while i < self.entries.length() {
-    let (k, v) = self.entries[i]
-    ignore(SortedMap::insert(result, k, f(v)))
+    new_entries.push((self.entries[i].0, f(self.entries[i].1)))
     i = i + 1
   }
-  result
+  { entries: new_entries, fp_cache: 0UL, fp_dirty: true }
 }
 
 ///|
@@ -311,16 +301,35 @@ pub fn[K : Compare, V] SortedMap::merge(
   other : SortedMap[K, V],
   resolve : (V, V) -> V,
 ) -> SortedMap[K, V] {
-  let result = SortedMap::new()
-  self.each(fn(k : K, v : V) -> Unit { ignore(SortedMap::insert(result, k, v)) })
-  other.each(fn(k : K, v : V) -> Unit {
-    match SortedMap::get(result, k) {
-      Some(existing) =>
-        ignore(SortedMap::insert(result, k, resolve(existing, v)))
-      None => ignore(SortedMap::insert(result, k, v))
+  // Two-pointer merge on sorted arrays, O(n+m)
+  let new_entries : Array[(K, V)] = []
+  let mut i = 0
+  let mut j = 0
+  while i < self.entries.length() && j < other.entries.length() {
+    let (k1, v1) = self.entries[i]
+    let (k2, v2) = other.entries[j]
+    let cmp = k1.compare(k2)
+    if cmp < 0 {
+      new_entries.push((k1, v1))
+      i = i + 1
+    } else if cmp > 0 {
+      new_entries.push((k2, v2))
+      j = j + 1
+    } else {
+      new_entries.push((k1, resolve(v1, v2)))
+      i = i + 1
+      j = j + 1
     }
-  })
-  result
+  }
+  while i < self.entries.length() {
+    new_entries.push(self.entries[i])
+    i = i + 1
+  }
+  while j < other.entries.length() {
+    new_entries.push(other.entries[j])
+    j = j + 1
+  }
+  { entries: new_entries, fp_cache: 0UL, fp_dirty: true }
 }
 
 ///|
