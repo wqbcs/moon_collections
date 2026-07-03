@@ -464,6 +464,33 @@ pub fn[T] RingBuffer::skip(self : RingBuffer[T], n : Int) -> Array[T] {
 }
 
 ///|
+pub fn[T : Compare] RingBuffer::sort(self : RingBuffer[T]) -> Unit {
+  let arr = self.to_array()
+  arr.sort_by(fn(a : T, b : T) -> Int { a.compare(b) })
+  let mut i = 0
+  while i < arr.length() {
+    self.data[(self.head + i) % self.capacity] = Some(arr[i])
+    i = i + 1
+  }
+  self.fp_dirty = true
+}
+
+///|
+pub fn[T : Eq] RingBuffer::find_last(self : RingBuffer[T], item : T) -> Int? {
+  let mut found_idx : Int? = None
+  let mut i = 0
+  while i < self.count {
+    let idx = (self.head + i) % self.capacity
+    match self.data[idx] {
+      Some(v) => if v == item { found_idx = Some(i) }
+      None => ()
+    }
+    i = i + 1
+  }
+  found_idx
+}
+
+///|
 pub fn[T] RingBuffer::reverse(self : RingBuffer[T]) -> Unit {
   let arr = self.to_array()
   let mut i = 0
