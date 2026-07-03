@@ -199,6 +199,74 @@ test "bitset_complement_empty_invariant" {
 }
 
 ///|
+test "bitset_iter_ones_zeros" {
+  let bs = @bitmask.BitSet::new(64)
+  bs.set(0)
+  bs.set(3)
+  bs.set(7)
+  assert_true(bs.iter_ones().to_array() == [0, 3, 7])
+  assert_true(bs.iter_zeros().to_array().length() == 61)
+  bs.set_all()
+  assert_true(bs.iter_zeros().to_array() == [])
+  bs.clear_all()
+  assert_true(bs.iter_ones().to_array() == [])
+}
+
+///|
+test "sortedmap_floor_ceil" {
+  let m = @sortedmap.SortedMap::from_array([(1, "a"), (3, "c"), (5, "e")])
+  assert_true(m.floor(4) == Some((3, "c")))
+  assert_true(m.floor(3) == Some((3, "c")))
+  assert_true(m.floor(0) == None)
+  assert_true(m.ceil(2) == Some((3, "c")))
+  assert_true(m.ceil(3) == Some((3, "c")))
+  assert_true(m.ceil(6) == None)
+}
+
+///|
+test "sortedmap_retain" {
+  let m = @sortedmap.SortedMap::from_array([(1, 10), (2, 20), (3, 30), (4, 40)])
+  m.retain(fn(k : Int, _v : Int) -> Bool { k % 2 == 0 })
+  assert_true(m.len() == 2)
+  assert_true(m.contains(2))
+  assert_true(m.contains(4))
+  assert_true(!m.contains(1))
+}
+
+///|
+test "compactintmap_retain" {
+  let m = @compactintmap.CompactIntMap::from_array([(1, "a"), (2, "b"), (3, "c")])
+  m.retain(fn(k : Int, _v : String) -> Bool { k > 1 })
+  assert_true(m.len() == 2)
+  assert_true(m.contains(2))
+  assert_true(m.contains(3))
+  assert_true(!m.contains(1))
+}
+
+///|
+test "indexmap_has_all_any" {
+  let m = @indexmap.IndexMap::from_array([("a", 1), ("b", 2), ("c", 3)])
+  assert_true(m.has_all(["a", "b"]))
+  assert_true(m.has_all(["a", "b", "c"]))
+  assert_true(!m.has_all(["a", "d"]))
+  assert_true(m.has_any(["a", "d"]))
+  assert_true(!m.has_any(["x", "y"]))
+}
+
+///|
+test "indexmap_drain" {
+  let m = @indexmap.IndexMap::from_array([("a", 1), ("b", 2), ("c", 3), ("d", 4)])
+  let drained = m.drain(fn(_k : String, v : Int) -> Bool { v % 2 == 0 })
+  assert_true(drained.len() == 2)
+  assert_true(drained.contains("b"))
+  assert_true(drained.contains("d"))
+  assert_true(m.len() == 2)
+  assert_true(m.contains("a"))
+  assert_true(m.contains("c"))
+  assert_true(!m.contains("b"))
+}
+
+///|
 test "bitset_set_all_bounds_invariant" {
   // set_all must NOT set bits beyond self.len
   let bs = @bitmask.BitSet::new(10)
