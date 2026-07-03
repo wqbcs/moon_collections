@@ -19,7 +19,7 @@ pub impl @traits.Collection for TestCollection with fn is_empty(self) -> Bool {
 }
 
 ///|
-pub impl @traits.Deterministic for TestCollection with fn fingerprint(self) -> UInt64 {
+pub impl @traits.Deterministic for TestCollection with fn fingerprint(_self) -> UInt64 {
   42UL
 }
 

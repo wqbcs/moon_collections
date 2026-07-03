@@ -70,7 +70,7 @@ test "empty_collections_edge_cases" {
   assert_true(!bs.contains(0))
 
   // Empty RingBuffer
-  let rb = @ringbuffer.RingBuffer::new(4)
+  let rb : @ringbuffer.RingBuffer[Int] = @ringbuffer.RingBuffer::new(4)
   assert_true(rb.len() == 0)
   assert_true(rb.front() == None)
   assert_true(rb.back() == None)
