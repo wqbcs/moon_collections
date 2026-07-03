@@ -54,7 +54,7 @@ pub fn[K : Hash + Eq] Counter::set(
   key : K,
   count : Int,
 ) -> Unit {
-  if count == 0 {
+  if count <= 0 {
     ignore(self.map.shift_remove(key))
   } else {
     ignore(self.map.insert(key, count))
@@ -262,7 +262,8 @@ pub fn[K, R : Hash + Eq] Counter::map_keys(
 ) -> Counter[R] {
   let result = Counter::new()
   self.map.each(fn(k : K, v : Int) -> Unit {
-    result.set(f(k), Counter::get(result, f(k)) + v)
+    let new_key = f(k)
+    result.set(new_key, Counter::get(result, new_key) + v)
   })
   result
 }
