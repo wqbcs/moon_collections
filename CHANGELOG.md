@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-07-03
+
+### Added
+
+**Clone Methods**
+- `IndexMap.clone()` — deep copy preserving all entries and fingerprint cache state
+- `IndexSet.clone()` — deep copy via `from_array(to_array())`
+- `SortedMap.clone()` — deep copy preserving sorted order
+- `CompactIntMap.clone()` — deep copy preserving sorted entries
+
+**BitSet Enhancements**
+- `iter_ones()` — iterate over all set bit positions
+- `iter_zeros()` — iterate over all unset bit positions within `[0, len)`
+- `first_zero()` / `last_zero()` — find first/last unset bit
+- `union_with(other)` — in-place union (modifies self, reduces allocations)
+- `intersect_with(other)` — in-place intersection
+- `difference_with(other)` — in-place difference
+
+**SortedMap Enhancements**
+- `range(from, to)` — now uses binary search to locate start position (was O(n), now O(log n + k))
+- `floor(key)` — largest key ≤ given key
+- `ceil(key)` — smallest key ≥ given key
+
+**CompactIntMap Enhancements**
+- `floor_key(key)` / `ceil_key(key)` — binary-search-based integer key boundary queries
+
+**DisjointSet Enhancements**
+- `component_elements(x)` — return all elements in the same component as x
+
+**RingBuffer Enhancements**
+- `sort(T : Compare)` — in-place sort of buffer contents
+- `find_last(T : Eq)` — find last occurrence index of an item
+
+### Fixed
+
+- `BitSet.complement()` — now masks out bits beyond `self.len` (was flipping bits in unused storage area, causing `contains()` to return incorrect results for positions ≥ len)
+- `diff_sequences` — substitution paths now emit `Delete`+`Insert` pair instead of just `Delete` (edit sequence was undercounting substitutions)
+- `diff_arrays` — O(n×m) → O(n+m) using IndexSet for O(1) membership check
+- `diff/moon.pkg` — added missing `indexmap` dependency
+- `Counter.subtract_counter` — no longer produces negative counts (removes keys that go to zero or below)
+- All 290 tests passing (up from 286)
+
 ## [0.1.0] - 2026-06-08
 
 ### Added
