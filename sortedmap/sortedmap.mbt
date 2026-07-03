@@ -29,6 +29,13 @@ pub fn[K : Compare, V] SortedMap::from_array(
 }
 
 ///|
+pub fn[K, V] SortedMap::from_sorted_entries(
+  entries : Array[(K, V)],
+) -> SortedMap[K, V] {
+  { entries, fp_cache: 0UL, fp_dirty: true }
+}
+
+///|
 pub fn[K : Compare, V] SortedMap::clone(self : SortedMap[K, V]) -> SortedMap[K, V] {
   SortedMap::from_array(SortedMap::to_array(self))
 }

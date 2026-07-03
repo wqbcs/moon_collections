@@ -125,10 +125,11 @@ pub fn[T] RingBuffer::pop_back(self : RingBuffer[T]) -> T? {
   if self.count == 0 {
     None
   } else {
-    self.tail = (self.tail - 1 + self.capacity) % self.capacity
-    match self.data[self.tail] {
+    let new_tail = (self.tail - 1 + self.capacity) % self.capacity
+    match self.data[new_tail] {
       Some(item) => {
-        self.data[self.tail] = None
+        self.data[new_tail] = None
+        self.tail = new_tail
         self.count = self.count - 1
         self.fp_dirty = true
         Some(item)

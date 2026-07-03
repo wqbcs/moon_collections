@@ -2,9 +2,9 @@
 pub fn[K : Compare, V] to_sorted_map(
   im : @indexmap.IndexMap[K, V],
 ) -> @sortedmap.SortedMap[K, V] {
-  let sm = @sortedmap.SortedMap::new()
-  im.each(fn(k : K, v : V) -> Unit { ignore(sm.insert(k, v)) })
-  sm
+  let arr = im.to_array()
+  arr.sort_by(fn(a : (K, V), b : (K, V)) -> Int { a.0.compare(b.0) })
+  @sortedmap.SortedMap::from_sorted_entries(arr)
 }
 
 ///|
