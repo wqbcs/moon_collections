@@ -242,6 +242,24 @@ pub fn[K : Compare, V] SortedMap::floor(
 }
 
 ///|
+pub fn[K, V] SortedMap::retain(
+  self : SortedMap[K, V],
+  pred : (K, V) -> Bool,
+) -> Unit {
+  let new_entries : Array[(K, V)] = []
+  let mut i = 0
+  while i < self.entries.length() {
+    let (k, v) = self.entries[i]
+    if pred(k, v) {
+      new_entries.push((k, v))
+    }
+    i = i + 1
+  }
+  self.entries = new_entries
+  self.fp_dirty = true
+}
+
+///|
 pub fn[K : Compare, V] SortedMap::ceil(
   self : SortedMap[K, V],
   key : K,

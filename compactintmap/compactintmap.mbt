@@ -245,6 +245,24 @@ pub fn[V] CompactIntMap::clear(self : CompactIntMap[V]) -> Unit {
 }
 
 ///|
+pub fn[V] CompactIntMap::retain(
+  self : CompactIntMap[V],
+  pred : (Int, V) -> Bool,
+) -> Unit {
+  let new_entries : Array[(Int, V)] = []
+  let mut i = 0
+  while i < self.entries.length() {
+    let (k, v) = self.entries[i]
+    if pred(k, v) {
+      new_entries.push((k, v))
+    }
+    i = i + 1
+  }
+  self.entries = new_entries
+  self.fp_dirty = true
+}
+
+///|
 pub fn[V] CompactIntMap::update(
   self : CompactIntMap[V],
   key : Int,
