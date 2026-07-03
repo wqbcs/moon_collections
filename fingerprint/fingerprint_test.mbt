@@ -116,3 +116,16 @@ test "fnv1a_hash_negative_int_consistency" {
   let h_zero = @fingerprint.fnv1a_hash_int(0, @fingerprint.fnv_offset_basis)
   assert_true(h_zero != 0UL)
 }
+
+///|
+test "fnv1a_rolling_vs_batch" {
+  // RollingFingerprint must match batch fingerprint for same inputs
+  let rf = @fingerprint.RollingFingerprint::new()
+  rf.update_int(1)
+  rf.update_int(2)
+  rf.update_int(3)
+  assert_true(rf.hash() == @fingerprint.fingerprint_ints([1, 2, 3]))
+  // Rolling after reset matches empty batch
+  rf.reset()
+  assert_true(rf.hash() == @fingerprint.fnv_offset_basis)
+}
