@@ -2,6 +2,7 @@ import {
   "moonbitlang/core/array",
   "moonbitlang/core/int",
   "moonbitlang/core/option",
+  "wqbcs/moon_collections/indexmap",
 }
 
 import {

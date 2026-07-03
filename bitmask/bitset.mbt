@@ -267,6 +267,14 @@ pub fn BitSet::complement(self : BitSet) -> BitSet {
     result.bits[i] = result.bits[i].lnot()
     i = i + 1
   }
+  // mask out bits beyond self.len in the last block
+  let bits_per_block = 64
+  let last_bit_count = self.len % bits_per_block
+  if last_bit_count != 0 {
+    let last_block = result.bits.length() - 1
+    let mask = (1UL << last_bit_count) - 1UL
+    result.bits[last_block] = result.bits[last_block] & mask
+  }
   result
 }
 

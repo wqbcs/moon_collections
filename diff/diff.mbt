@@ -13,33 +13,33 @@ pub fn[T] Diff::new() -> Diff[T] {
 ///|
 pub fn diff_arrays(old : Array[Int], new : Array[Int]) -> Diff[Int] {
   let result = Diff::new()
+  // Build a set of indices present in old for O(1) lookup
+  let old_set = @indexmap.IndexSet::new()
+  let mut j = 0
+  while j < old.length() {
+    @indexmap.IndexSet::insert(old_set, old[j])
+    j = j + 1
+  }
+  // Build a set of indices present in new for O(1) lookup
+  let new_set = @indexmap.IndexSet::new()
+  j = 0
+  while j < new.length() {
+    @indexmap.IndexSet::insert(new_set, new[j])
+    j = j + 1
+  }
+  // Items in new but not in old → added
   let mut i = 0
   while i < new.length() {
-    let mut found = false
-    let mut j = 0
-    while j < old.length() {
-      if old[j] == new[i] {
-        found = true
-      }
-      j = j + 1
-    }
-    if !found {
-      ignore(result.added.push(new[i]))
+    if !old_set.contains(new[i]) {
+      result.added.push(new[i])
     }
     i = i + 1
   }
+  // Items in old but not in new → removed
   let mut k = 0
   while k < old.length() {
-    let mut found = false
-    let mut l = 0
-    while l < new.length() {
-      if new[l] == old[k] {
-        found = true
-      }
-      l = l + 1
-    }
-    if !found {
-      ignore(result.removed.push(old[k]))
+    if !new_set.contains(old[k]) {
+      result.removed.push(old[k])
     }
     k = k + 1
   }
@@ -173,6 +173,7 @@ pub fn diff_sequences(old : Array[Int], new : Array[Int]) -> SequenceDiff {
       cj > 0 &&
       dp[ci * (n + 1) + cj] == dp[(ci - 1) * (n + 1) + (cj - 1)] + 1 {
       ops.push(Delete)
+      ops.push(Insert)
       ci = ci - 1
       cj = cj - 1
     } else if cj > 0 && dp[ci * (n + 1) + cj] == dp[ci * (n + 1) + (cj - 1)] + 1 {
