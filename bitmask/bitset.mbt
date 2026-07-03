@@ -261,6 +261,9 @@ pub fn BitSet::symmetric_difference(self : BitSet, other : BitSet) -> BitSet {
 
 ///|
 pub fn BitSet::complement(self : BitSet) -> BitSet {
+  if self.len == 0 {
+    return BitSet::none()
+  }
   let result = self.clone()
   let mut i = 0
   while i < result.bits.length() {
@@ -345,6 +348,14 @@ pub fn BitSet::set_all(self : BitSet) -> Unit {
   while i < self.bits.length() {
     self.bits[i] = 0UL.lnot()
     i = i + 1
+  }
+  // mask out bits beyond self.len in the last block
+  let bits_per_block = 64
+  let last_bit_count = self.len % bits_per_block
+  if last_bit_count != 0 {
+    let last_block = self.bits.length() - 1
+    let mask = (1UL << last_bit_count) - 1UL
+    self.bits[last_block] = self.bits[last_block] & mask
   }
   self.fp_dirty = true
 }

@@ -176,3 +176,44 @@ test "bitset_inplace_ops" {
   assert_true(a.contains(3))
   assert_true(!a.contains(2))
 }
+
+///|
+test "bitset_complement_empty_invariant" {
+  // complement of empty BitSet must be empty (len=0 → no bits defined)
+  let empty = @bitmask.BitSet::none()
+  let c = empty.complement()
+  assert_true(c.len() == 0)
+  assert_true(c.is_empty())
+  assert_true(c.contains(0) == false)
+
+  // complement of complement returns to original state
+  let bs = @bitmask.BitSet::new(64)
+  bs.set(3)
+  bs.set(7)
+  let c1 = bs.complement()
+  let c2 = c1.complement()
+  assert_true(c2.contains(3))
+  assert_true(c2.contains(7))
+  assert_true(!c2.contains(5))
+  assert_true(c2.len() == bs.len())
+}
+
+///|
+test "bitset_set_all_bounds_invariant" {
+  // set_all must NOT set bits beyond self.len
+  let bs = @bitmask.BitSet::new(10)
+  bs.set_all()
+  assert_true(bs.contains(0))
+  assert_true(bs.contains(9))
+  assert_true(!bs.contains(10))
+  assert_true(!bs.contains(63))
+  assert_true(bs.count_ones() == 10)
+  assert_true(bs.all_set())
+
+  // set_all + complement should give empty set for the defined range
+  let bs2 = @bitmask.BitSet::new(20)
+  bs2.set_all()
+  let c = bs2.complement()
+  assert_true(c.is_empty())
+  assert_true(c.count_ones() == 0)
+}
