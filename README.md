@@ -1,65 +1,156 @@
-# Project Agents.md Guide
+# moon_collections
 
-This is a [MoonBit](https://docs.moonbitlang.com) project.
+> **确定性数据处理框架 / Deterministic Data Processing Framework for MoonBit/WASM**
+> 12 种数据结构 · 2 个开放特征 · FNV-1a 指纹 · 零不确定性
+> 12 data structures · 2 open traits · FNV-1a fingerprinting · zero nondeterminism
 
-You can browse and install extra skills here:
-<https://github.com/moonbitlang/skills>
+[![CI](https://github.com/wqbcs/moon_collections/actions/workflows/ci.yml/badge.svg)](https://github.com/wqbcs/moon_collections/actions/workflows/ci.yml)
 
-## Project Structure
+---
 
-- MoonBit packages are organized per directory; each directory contains a
-  `moon.pkg` file listing its dependencies. Each package has its files and
-  blackbox test files (ending in `_test.mbt`) and whitebox test files (ending in
-  `_wbtest.mbt`).
+## 中文介绍
 
-- In the toplevel directory, there is a `moon.mod` file listing module
-  metadata.
+### 问题：WASM 中的不确定性
 
-## Coding convention
+当编译到 WebAssembly 时，标准基于哈希的集合会产生**不确定的输出**：
 
-- MoonBit code is organized in block style, each block is separated by `///|`,
-  the order of each block is irrelevant. In some refactorings, you can process
-  block by block independently.
+- `HashMap` 迭代顺序因运行而异 → JSON 序列化不可预测
+- `remove()` 末尾交换 → 顺序被静默破坏
+- 无法跨分布式节点验证两个集合是否"相同"
+- 没有用于缓存失效、审计日志或共识协议的指纹
 
-- Try to keep deprecated blocks in file called `deprecated.mbt` in each
-  directory.
+**这是正确性问题，不是性能问题。** 不确定性破坏了可重现性、测试和分布式共识。
 
-## Tooling
+### 解决方案：三个原则
 
-- `moon fmt` is used to format your code properly.
+1. **DETERMINISTIC（确定性）** — 相同输入 → 始终相同输出
+2. **VERIFIABLE（可验证）** — 通过指纹进行结构相等性比较
+3. **COMPOSABLE（可组合）** — 操作保持确定性
 
-- `moon ide` provides project navigation helpers like `peek-def`, `outline`, and
-  `find-references`. See $moonbit-agent-guide for details.
+---
 
-- `moon info` is used to update the generated interface of the package, each
-  package has a generated interface file `.mbti`, it is a brief formal
-  description of the package. If nothing in `.mbti` changes, this means your
-  change does not bring the visible changes to the external package users, it is
-  typically a safe refactoring.
+## English Introduction
 
-- In the last step, run `moon info && moon fmt` to update the interface and
-  format the code. Check the diffs of `.mbti` file to see if the changes are
-  expected.
+### The Problem: Nondeterminism in WASM
 
-- Run `moon test` to check tests pass. MoonBit supports snapshot testing; when
-  changes affect outputs, run `moon test --update` to refresh snapshots.
+When compiling to WebAssembly, standard hash-based collections produce **nondeterministic output**:
 
-- Prefer `assert_true` for assertions (note: `assert_eq` is deprecated in current MoonBit). For snapshot tests that record
-  structured debugging output, derive `Debug` and use `debug_inspect`, rather
-  than deriving `Show` for debugging. For solid, well-defined results (e.g.
-  scientific computations), prefer assertion tests. You can use
-  `moon coverage analyze > uncovered.log` to see which parts of your code are
-  not covered by tests.
+- `HashMap` iteration order varies across runs → JSON serialization is unpredictable
+- `remove()` swaps with last element → order is destroyed silently
+- No way to verify two collections are "the same" across distributed nodes
+- No fingerprint for cache invalidation, audit logging, or consensus protocols
 
-## moon_collections Specifics
+**This is a correctness issue, not a performance issue.** Nondeterminism breaks reproducibility, testing, and distributed consensus.
 
-- **Core principle**: DETERMINISTIC × VERIFIABLE × COMPOSABLE
-- **12 data structures**: IndexMap, IndexSet, BitSet, BitFlags, Counter, DefaultMap, CompactIntMap, SortedMap, RingBuffer, SparseSet, DisjointSet, Diff
-- **2 open traits**: Collection (len, is_empty), Deterministic (fingerprint, ordered_eq)
-- **Fingerprint**: FNV-1a with lazy caching (fp_cache + fp_dirty) on all 11 Deterministic structs
-- **Key invariant**: remove() defaults to shift_remove (preserves insertion order)
-- **WASM safety**: at()/get() return Option (no abort/trap), RingBuffer fixed capacity
-- **Counter.most_common()**: stable sort (equal counts preserve insertion order via Schwartzian transform)
-- **DisjointSet.fingerprint()**: fully path-compresses before hashing (logical equivalence)
-- **Cross-structure conversion**: `convert` package provides `to_sorted_map()` and `to_index_map()`
-- **traits/fp/diff are leaf packages**: no circular dependencies with implementation packages
+### The Solution: Three Principles
+
+1. **DETERMINISTIC** — Same input → same output, always
+2. **VERIFIABLE** — Structural equality with fingerprint
+3. **COMPOSABLE** — Operations preserve determinism
+
+---
+
+## 安装 / Install
+
+```bash
+moon add wqbcs/moon_collections
+```
+
+## 快速开始 / Quick Start
+
+```moonbit nocheck
+let m = @indexmap.IndexMap::new()
+m.insert("name", "Alice")
+m.insert("age", "30")
+m.insert("city", "Beijing")
+
+// 确定性迭代 — 始终相同顺序 / Deterministic iteration — always same order
+m.keys_array() // => ["name", "age", "city"]
+
+// 指纹验证 / Fingerprint verification
+m.fingerprint() // => 14528911724609714292UL (已计算并缓存 / computed, cached)
+
+// 位置感知相等性 / Position-aware equality
+let m2 = @indexmap.IndexMap::new()
+m2.insert("name", "Alice")
+m2.insert("age", "30")
+m2.insert("city", "Beijing")
+m.ordered_eq(m2) // => true (相同顺序，相同值 / same order, same values)
+
+// 删除保持顺序（默认 shift_remove）/ Remove preserves order (shift_remove by default)
+m.remove("age")
+m.keys_array() // => ["name", "city"]
+```
+
+---
+
+## 数据结构 / Data Structures
+
+| 结构 / Structure | 描述 / Description | Collection | Deterministic |
+|-----------|-------------|:----------:|:-------------:|
+| **IndexMap[K,V]** | 有序哈希映射 / Ordered hash map | ✅ | ✅ |
+| **IndexSet[K]** | 保序集合 / Ordered set | ✅ | ✅ |
+| **BitSet** | 位集合 / Bit collection | ✅ | ✅ |
+| **BitFlags** | 64位标志 / 64-bit flags | ✅ | ✅ |
+| **Counter[K]** | 频率计数器 / Frequency counter | ✅ | ✅ |
+| **DefaultMap[K,V]** | 默认值映射 / Map with default value | ✅ | ✅ |
+| **CompactIntMap[V]** | 整型键映射（二分搜索）/ Sorted integer map | ✅ | ✅ |
+| **SortedMap[K,V]** | 比较排序映射 / Compare-based sorted map | ✅ | ✅ |
+| **RingBuffer[T]** | 环形缓冲区 / Circular buffer | ✅ | ✅ |
+| **SparseSet[V]** | 稀疏集（ECS优化）/ ECS sparse set | ✅ | ✅ |
+| **DisjointSet** | 并查集 / Union-Find | ✅ | ✅ |
+| **Diff** | LCS + 编辑距离 / Edit distance | ✗ | ✗ |
+
+---
+
+## 核心特征 / Core Traits
+
+```moonbit nocheck
+///|
+pub(open) trait Collection {
+  fn len(Self) -> Int
+  fn is_empty(Self) -> Bool
+}
+
+///|
+pub(open) trait Deterministic: Collection {
+  fn fingerprint(Self) -> UInt64
+  fn ordered_eq(Self, Self) -> Bool
+}
+```
+
+All 11 data structures implement `Collection`. All implement `Deterministic` (except Diff which is algorithm-only).
+
+所有 11 种数据结构实现了 `Collection`。全部（除 Diff 外）实现了 `Deterministic`。
+
+---
+
+## 特性 / Features
+
+### 中文
+
+- **12 种确定性数据结构**：IndexMap、IndexSet、BitSet、BitFlags、Counter、DefaultMap、CompactIntMap、SortedMap、RingBuffer、SparseSet、DisjointSet、Diff
+- **FNV-1a 指纹验证**：惰性缓存，O(n) 首次计算，O(1) 后续访问
+- **Collection + Deterministic 开放特征**：可实现自定义确定性类型
+- **`remove()` 默认 shift_remove**：保持插入顺序
+- **WASM 安全**：`get()`/`at()` 返回 `Option`（无异常中断）
+- **跨结构转换**：IndexMap ↔ SortedMap 双向转换
+- **完整 CI/CD**：GitHub Actions 自动检查、构建、测试、格式化验证
+- **300+ 测试用例**，全部通过
+
+### English
+
+- **12 deterministic data structures**: IndexMap, IndexSet, BitSet, BitFlags, Counter, DefaultMap, CompactIntMap, SortedMap, RingBuffer, SparseSet, DisjointSet, Diff
+- **FNV-1a fingerprinting**: Lazy caching, O(n) first call, O(1) cached access
+- **Collection + Deterministic open traits**: Implement custom deterministic types
+- **`remove()` defaults to shift_remove**: Preserves insertion order
+- **WASM safety**: `get()`/`at()` return `Option` (no abort/trap)
+- **Cross-structure conversion**: IndexMap ↔ SortedMap bidirectional
+- **Full CI/CD**: GitHub Actions auto check, build, test, format
+- **300+ test cases**, all passing
+
+---
+
+## 许可证 / License
+
+Apache-2.0
