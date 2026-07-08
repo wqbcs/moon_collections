@@ -88,14 +88,15 @@ m.keys_array() // => ["name", "city"]
 
 在你自己的项目中（已执行 `moon add wqbcs/moon_collections`）：
 
-```moonbit
+```moonbit nocheck
+///|
 fn main {
   let m = @indexmap.IndexMap::new()
   m.insert("name", "Alice")
   m.insert("age", "30")
   m.insert("city", "Beijing")
-  println(m.keys_array())   // ["name", "age", "city"]
-  println(m.fingerprint())  // 稳定的 UInt64 指纹（相同输入 => 相同值）
+  println(m.keys_array()) // ["name", "age", "city"]
+  println(m.fingerprint()) // 稳定的 UInt64 指纹（相同输入 => 相同值）
   let m2 = @indexmap.IndexMap::new()
   m2.insert("name", "Alice")
   m2.insert("age", "30")
