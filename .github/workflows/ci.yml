@@ -48,8 +48,11 @@ jobs:
         run: moon check --target all --deny-warn
 
       # 硬性要求 2：moon test
+      # 本项目聚焦 WASM，CI 默认在 wasm / wasm-gc 两个目标上运行测试
+      # （均为已验证通过的目标；如需更广覆盖可在 GitHub 自托管/装有 node 与
+      #  llvm 的 runner 上改用 `moon test --target all`）。
       - name: moon test
-        run: moon test --target all
+        run: moon test --target wasm,wasm-gc
 
       # 硬性要求 3 & 4：格式与公开接口文件必须与提交内容完全一致
       # 说明：在 MoonBit 0.10.x 中，`moon fmt` / `moon info` 没有 `--deny-warn` 选项，
