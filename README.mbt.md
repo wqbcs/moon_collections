@@ -56,6 +56,8 @@ When compiling to WebAssembly, standard hash-based collections produce **nondete
 moon add wqbcs/moon_collections
 ```
 
+> **环境要求 / Requirements**：MoonBit 工具链 ≥ **0.10.3**（`moon check --deny-warn`、保留字检查等特性需要该版本）。
+
 ## 快速开始 / Quick Start
 
 ```moonbit nocheck
@@ -80,6 +82,32 @@ m.ordered_eq(m2) // => true (相同顺序，相同值 / same order, same values)
 // 删除保持顺序（默认 shift_remove）/ Remove preserves order (shift_remove by default)
 m.remove("age")
 m.keys_array() // => ["name", "city"]
+```
+
+### 最小可运行示例 / Minimal Runnable Example
+
+在你自己的项目中（已执行 `moon add wqbcs/moon_collections`）：
+
+```moonbit
+fn main {
+  let m = @indexmap.IndexMap::new()
+  m.insert("name", "Alice")
+  m.insert("age", "30")
+  m.insert("city", "Beijing")
+  println(m.keys_array())   // ["name", "age", "city"]
+  println(m.fingerprint())  // 稳定的 UInt64 指纹（相同输入 => 相同值）
+  let m2 = @indexmap.IndexMap::new()
+  m2.insert("name", "Alice")
+  m2.insert("age", "30")
+  m2.insert("city", "Beijing")
+  println(m.ordered_eq(m2)) // true（相同顺序、相同值）
+}
+```
+
+本仓库自带可直接运行的演示（`cmd/main`）：
+
+```bash
+moon run cmd/main
 ```
 
 ---
@@ -135,8 +163,8 @@ All 11 data structures implement `Collection`. All implement `Deterministic` (ex
 - **`remove()` 默认 shift_remove**：保持插入顺序
 - **WASM 安全**：`get()`/`at()` 返回 `Option`（无异常中断）
 - **跨结构转换**：IndexMap ↔ SortedMap 双向转换
-- **完整 CI/CD**：GitHub Actions 自动检查、构建、测试、格式化验证
-- **300+ 测试用例**，全部通过
+- **完整 CI/CD**：GitHub Actions 自动执行 `moon check --deny-warn` · `moon test` · `moon fmt` · `moon info` 四步校验
+- **311 个测试用例**，全部通过
 
 ### English
 
@@ -146,8 +174,8 @@ All 11 data structures implement `Collection`. All implement `Deterministic` (ex
 - **`remove()` defaults to shift_remove**: Preserves insertion order
 - **WASM safety**: `get()`/`at()` return `Option` (no abort/trap)
 - **Cross-structure conversion**: IndexMap ↔ SortedMap bidirectional
-- **Full CI/CD**: GitHub Actions auto check, build, test, format
-- **300+ test cases**, all passing
+- **Full CI/CD**: GitHub Actions runs `moon check --deny-warn`, `moon test`, `moon fmt`, `moon info` in CI
+- **311 test cases**, all passing
 
 ---
 

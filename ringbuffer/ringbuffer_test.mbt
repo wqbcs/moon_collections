@@ -150,7 +150,7 @@ test "ringbuffer_extend" {
   let rb = @ringbuffer.RingBuffer::new(6)
   ignore(rb.push_back(1))
   ignore(rb.push_back(2))
-  rb.extend([3, 4, 5])
+  rb.extend_([3, 4, 5])
   assert_true(rb.len() == 5)
   assert_true(rb.to_array() == [1, 2, 3, 4, 5])
 }
@@ -159,7 +159,7 @@ test "ringbuffer_extend" {
 test "ringbuffer_extend_overflow" {
   let rb = @ringbuffer.RingBuffer::new(3)
   ignore(rb.push_back(1))
-  rb.extend([2, 3, 4])
+  rb.extend_([2, 3, 4])
   assert_true(rb.len() == 3)
   assert_true(rb.to_array() == [2, 3, 4])
 }

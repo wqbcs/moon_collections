@@ -385,7 +385,7 @@ pub impl[T : Eq] Eq for RingBuffer[T] with fn equal(
 }
 
 ///|
-pub fn[T] RingBuffer::extend(self : RingBuffer[T], items : Array[T]) -> Unit {
+pub fn[T] RingBuffer::extend_(self : RingBuffer[T], items : Array[T]) -> Unit {
   self.fp_dirty = true
   let mut i = 0
   while i < items.length() {

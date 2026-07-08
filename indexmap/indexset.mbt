@@ -274,7 +274,7 @@ pub fn[K : Hash + Eq] IndexSet::is_disjoint(
 }
 
 ///|
-pub fn[K : Hash + Eq] IndexSet::extend(
+pub fn[K : Hash + Eq] IndexSet::extend_(
   self : IndexSet[K],
   items : Array[K],
 ) -> Unit {

@@ -27,7 +27,7 @@ pub fn[T : Eq] RingBuffer::contains(Self[T], T) -> Bool
 pub fn[T : Eq] RingBuffer::count_item(Self[T], T) -> Int
 pub fn[T] RingBuffer::drain(Self[T], Int) -> Array[T]
 pub fn[T] RingBuffer::each(Self[T], (T) -> Unit) -> Unit
-pub fn[T] RingBuffer::extend(Self[T], Array[T]) -> Unit
+pub fn[T] RingBuffer::extend_(Self[T], Array[T]) -> Unit
 pub fn[T : Eq] RingBuffer::find_last(Self[T], T) -> Int?
 pub fn[T] RingBuffer::from_array(Array[T]) -> Self[T]
 pub fn[T] RingBuffer::front(Self[T]) -> T?

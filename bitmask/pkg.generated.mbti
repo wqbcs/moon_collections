@@ -63,7 +63,7 @@ pub fn BitSet::count_ones(Self) -> Int
 pub fn BitSet::count_zeros(Self) -> Int
 pub fn BitSet::difference(Self, Self) -> Self
 pub fn BitSet::difference_with(Self, Self) -> Unit
-pub fn BitSet::extend(Self, Int) -> Unit
+pub fn BitSet::extend_(Self, Int) -> Unit
 pub fn BitSet::first_one(Self) -> Int?
 pub fn BitSet::first_zero(Self) -> Int?
 pub fn BitSet::from_indices(Array[Int]) -> Self

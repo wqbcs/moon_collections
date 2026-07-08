@@ -1,0 +1,42 @@
+name: Publish to mooncakes.io
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Toolchain info
+        run: moon version --all
+
+      - name: Pre-publish check
+        run: |
+          moon check --target all --deny-warn
+          moon test --target all
+
+      - name: Publish
+        env:
+          MOONCAKES_TOKEN: ${{ secrets.MOONCAKES_TOKEN }}
+        run: |
+          if [ -z "$MOONCAKES_TOKEN" ]; then
+            echo "Error: MOONCAKES_TOKEN secret is not set."
+            echo "Set it to the full contents of your ~/.moon/credentials.json"
+            echo "(a JSON object containing your mooncakes.io token)."
+            exit 1
+          fi
+          printf '%s' "$MOONCAKES_TOKEN" > ~/.moon/credentials.json
+          moon publish
+          rm -f ~/.moon/credentials.json

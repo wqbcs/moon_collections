@@ -91,7 +91,7 @@ pub fn[K : Hash + Eq] IndexSet::clone(Self[K]) -> Self[K]
 pub fn[K : Hash + Eq] IndexSet::contains(Self[K], K) -> Bool
 pub fn[K : Hash + Eq] IndexSet::difference(Self[K], Self[K]) -> Self[K]
 pub fn[K] IndexSet::each(Self[K], (K) -> Unit) -> Unit
-pub fn[K : Hash + Eq] IndexSet::extend(Self[K], Array[K]) -> Unit
+pub fn[K : Hash + Eq] IndexSet::extend_(Self[K], Array[K]) -> Unit
 pub fn[K : Hash + Eq] IndexSet::from_array(Array[K]) -> Self[K]
 pub fn[K] IndexSet::get_index(Self[K], Int) -> K?
 pub fn[K : Hash + Eq] IndexSet::get_index_of(Self[K], K) -> Int?

@@ -6,52 +6,61 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
-  check:
-    runs-on: ubuntu-latest
+  check-test-lint:
+    name: Check, Test, Lint & Demo
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Install MoonBit
-        run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
-          echo "$HOME/.moon/bin" >> $GITHUB_PATH
-      - name: Version Info
-        run: moon version
-      - name: Check
-        run: moon check
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-  build:
-    runs-on: ubuntu-latest
-    needs: check
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install MoonBit
+      - name: Install MoonBit (Unix)
+        if: ${{ matrix.os != 'windows-latest' }}
         run: |
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
-          echo "$HOME/.moon/bin" >> $GITHUB_PATH
-      - name: Build
-        run: moon build
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install MoonBit
+      - name: Install MoonBit (Windows)
+        if: ${{ matrix.os == 'windows-latest' }}
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
-          echo "$HOME/.moon/bin" >> $GITHUB_PATH
-      - name: Test
-        run: moon test
+          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+          irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
+          "C:\Users\runneradmin\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
 
-  lint:
-    runs-on: ubuntu-latest
-    needs: check
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install MoonBit
+      - name: Toolchain info
+        run: moon version --all
+
+      - name: Update package registry
+        run: moon update
+
+      # 硬性要求 1：moon check
+      # --deny-warn 将警告提升为错误，可在升级工具链时拦截 `extend` 等保留字风险
+      - name: moon check
+        run: moon check --target all --deny-warn
+
+      # 硬性要求 2：moon test
+      - name: moon test
+        run: moon test --target all
+
+      # 硬性要求 3 & 4：格式与公开接口文件必须与提交内容完全一致
+      # 说明：在 MoonBit 0.10.x 中，`moon fmt` / `moon info` 没有 `--deny-warn` 选项，
+      # 官方社区模板（moonbit-community/.github）推荐用 `moon fmt && git diff --exit-code`
+      # 与 `moon info && git diff --exit-code` 来达到“不通过则 CI 失败”的等价效果。
+      - name: moon fmt & moon info consistency
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
-          echo "$HOME/.moon/bin" >> $GITHUB_PATH
-      - name: Format Check
-        run: moon fmt --check
+          moon fmt && git diff --exit-code
+          moon info && git diff --exit-code
+
+      # 可执行示例：确保 cmd/main 能真实运行并产生输出
+      # （覆盖“如果是可执行程序，moon run 有意义的 main 包能产生效果”的验收路径）
+      - name: moon run demo
+        run: moon run cmd/main
