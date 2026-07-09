@@ -15,8 +15,8 @@
     <a href="https://github.com/wqbcs/moon_collections/actions/workflows/ci.yml">
       <img src="https://github.com/wqbcs/moon_collections/actions/workflows/ci.yml/badge.svg" alt="CI"/>
     </a>
-    <a href="https://mooncakes.io/-/package/wqbcs/moon_collections">
-      <img src="https://img.shields.io/badge/mooncakes-v0.2.1-blue?logo=data:image/svg%2bxml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIzMiIgZmlsbD0iI2ZmZmZmZiIvPjwvc3ZnPg==" alt="mooncakes"/>
+    <a href="https://mooncakes.io/docs/wqbcs/moon_collections">
+      <img src="https://img.shields.io/badge/mooncakes-v0.2.2-blue" alt="mooncakes"/>
     </a>
     <img src="https://img.shields.io/badge/tests-311_✓-brightgreen" alt="311 tests"/>
     <img src="https://img.shields.io/badge/backends-4_✓-brightgreen" alt="4 backends"/>
@@ -426,7 +426,7 @@ limitations under the License.
   </p>
   <p>
     <a href="https://github.com/wqbcs/moon_collections">GitHub</a> ·
-    <a href="https://mooncakes.io/-/package/wqbcs/moon_collections">mooncakes.io</a> ·
+    <a href="https://mooncakes.io/docs/wqbcs/moon_collections">mooncakes.io</a> ·
     <a href="https://docs.moonbitlang.com">MoonBit Docs</a>
   </p>
   <p>
