@@ -6,9 +6,9 @@ import {
 }
 
 // Values
-pub fn diff_arrays(Array[Int], Array[Int]) -> Diff[Int]
-
 pub fn diff_sequences(Array[Int], Array[Int]) -> SequenceDiff
+
+pub fn diff_sets(Array[Int], Array[Int]) -> Diff[Int]
 
 pub fn edit_distance(Array[Int], Array[Int]) -> Int
 

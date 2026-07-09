@@ -11,7 +11,7 @@ pub fn[T] Diff::new() -> Diff[T] {
 }
 
 ///|
-pub fn diff_arrays(old : Array[Int], new : Array[Int]) -> Diff[Int] {
+pub fn diff_sets(old : Array[Int], new : Array[Int]) -> Diff[Int] {
   let result = Diff::new()
   // Build a set of indices present in old for O(1) lookup
   let old_set = @indexmap.IndexSet::new()

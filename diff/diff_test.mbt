@@ -1,6 +1,6 @@
 ///|
-test "diff_arrays_basic" {
-  let d = @diff.diff_arrays([1, 2, 3], [2, 3, 4])
+test "diff_sets_basic" {
+  let d = @diff.diff_sets([1, 2, 3], [2, 3, 4])
   assert_true(d.added.length() == 1)
   assert_true(d.added[0] == 4)
   assert_true(d.removed.length() == 1)
@@ -8,23 +8,23 @@ test "diff_arrays_basic" {
 }
 
 ///|
-test "diff_arrays_empty" {
-  let d = @diff.diff_arrays([1, 2], [1, 2])
+test "diff_sets_empty" {
+  let d = @diff.diff_sets([1, 2], [1, 2])
   assert_true(d.is_empty())
   assert_true(d.total_changes() == 0)
 }
 
 ///|
-test "diff_arrays_all_added" {
-  let d = @diff.diff_arrays([], [1, 2, 3])
+test "diff_sets_all_added" {
+  let d = @diff.diff_sets([], [1, 2, 3])
   assert_true(d.added.length() == 3)
   assert_true(d.removed.length() == 0)
   assert_true(d.total_changes() == 3)
 }
 
 ///|
-test "diff_arrays_all_removed" {
-  let d = @diff.diff_arrays([1, 2, 3], [])
+test "diff_sets_all_removed" {
+  let d = @diff.diff_sets([1, 2, 3], [])
   assert_true(d.added.length() == 0)
   assert_true(d.removed.length() == 3)
   assert_true(d.total_changes() == 3)

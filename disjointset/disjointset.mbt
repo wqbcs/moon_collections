@@ -194,13 +194,16 @@ fn DisjointSet::canonicalize_roots(self : DisjointSet) -> Unit {
     }
     i = i + 1
   }
-  // Reset stale sizes: non-root elements get size 1, ranks all 0
+  // Reset stale sizes: non-root elements get size 1
   i = 0
   while i < n {
-    if self.parent[i] != i {
+    if self.parent[i] == i {
+      // Roots get rank 1 (tree is flat after path compression + canonicalization)
+      self.rank[i] = 1
+    } else {
       self.size[i] = 1
+      self.rank[i] = 0
     }
-    self.rank[i] = 0
     i = i + 1
   }
   // Ensure the canonical root points to itself (not a stale old root)
