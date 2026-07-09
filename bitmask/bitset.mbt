@@ -362,6 +362,9 @@ pub fn BitSet::clear_all(self : BitSet) -> Unit {
 
 ///|
 pub fn BitSet::set_all(self : BitSet) -> Unit {
+  if self.len == 0 {
+    return
+  }
   let mut i = 0
   while i < self.bits.length() {
     self.bits[i] = 0UL.lnot()
