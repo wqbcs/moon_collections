@@ -27,7 +27,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup MoonBit toolchain
-        uses: chawyehsu/setup-moonup@v2
+        uses: chawyehsu/setup-moonup@v2.0.0
         with:
           moonbit-version: latest
 
