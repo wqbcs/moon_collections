@@ -33,7 +33,7 @@ pub fn[K] Counter::keys_array(Self[K]) -> Array[K]
 pub fn[K] Counter::len(Self[K]) -> Int
 pub fn[K, R : Hash + Eq] Counter::map_keys(Self[K], (K) -> R) -> Self[R]
 pub fn[K] Counter::max_count(Self[K]) -> Int
-pub fn[K : Hash + Eq] Counter::min_count(Self[K]) -> Int
+pub fn[K] Counter::min_count(Self[K]) -> Int
 pub fn[K : Hash + Eq] Counter::most_common(Self[K], Int) -> Array[(K, Int)]
 pub fn[K : Hash + Eq] Counter::new() -> Self[K]
 pub fn[K : Hash + Eq] Counter::remove(Self[K], K) -> Int
