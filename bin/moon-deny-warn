@@ -1,0 +1,47 @@
+#!/bin/bash
+# moon-deny-warn wrapper
+# Usage: moon-deny-warn <fmt|info> [args...]
+# Supports --deny-warn flag for moon fmt and moon info commands.
+# These commands do not natively support --deny-warn, so this wrapper
+# implements the equivalent behavior via "moon <cmd> && git diff --exit-code".
+
+CMD="$1"
+shift
+
+# Extract --deny-warn, pass everything else through
+DENY=false
+ARGS=()
+for arg in "$@"; do
+  if [ "$arg" = "--deny-warn" ]; then
+    DENY=true
+  else
+    ARGS+=("$arg")
+  fi
+done
+
+case "$CMD" in
+  fmt)
+    moon fmt "${ARGS[@]}"
+    RESULT=$?
+    if [ $RESULT -ne 0 ]; then exit $RESULT; fi
+    if [ "$DENY" = true ]; then
+      git diff --exit-code
+      exit $?
+    fi
+    ;;
+  info)
+    moon info "${ARGS[@]}"
+    RESULT=$?
+    if [ $RESULT -ne 0 ]; then exit $RESULT; fi
+    if [ "$DENY" = true ]; then
+      git diff --exit-code
+      exit $?
+    fi
+    ;;
+  *)
+    echo "Usage: moon-deny-warn <fmt|info> [args...]"
+    echo "Supported: fmt, info"
+    exit 1
+    ;;
+esac
+
