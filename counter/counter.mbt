@@ -289,13 +289,19 @@ pub fn[K] Counter::max_count(self : Counter[K]) -> Int {
 }
 
 ///|
-pub fn[K : Hash + Eq] Counter::min_count(self : Counter[K]) -> Int {
-  if self.map.is_empty() {
-    return 0
+pub fn[K] Counter::min_count(self : Counter[K]) -> Int {
+  match self.map.first() {
+    Some((_k, v)) => {
+      let mut min_val = v
+      self.map.each(fn(_k : K, v : Int) -> Unit {
+        if v < min_val {
+          min_val = v
+        }
+      })
+      min_val
+    }
+    None => 0
   }
-  let mut min_val = Counter::get(self, self.map.keys_array()[0])
-  self.map.each(fn(_k : K, v : Int) -> Unit { if v < min_val { min_val = v } })
-  min_val
 }
 
 ///|

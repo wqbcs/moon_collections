@@ -135,6 +135,22 @@ pub fn[K : Hash + Eq, V] IndexMap::swap_remove(
 }
 
 ///|
+// Shared internal: remove entry at index, return it. Used by shift_remove and remove_entry.
+fn[K : Hash + Eq, V] IndexMap::shift_remove_at(
+  self : IndexMap[K, V],
+  idx : Int,
+) -> Entry[K, V] {
+  let removed = self.entries[idx]
+  ignore(self.entries.remove(idx))
+  let mut i = idx
+  while i < self.entries.length() {
+    self.indices.set(self.entries[i].key, i)
+    i = i + 1
+  }
+  removed
+}
+
+///|
 pub fn[K : Hash + Eq, V] IndexMap::remove(self : IndexMap[K, V], key : K) -> V? {
   IndexMap::shift_remove(self, key)
 }
@@ -147,13 +163,7 @@ pub fn[K : Hash + Eq, V] IndexMap::shift_remove(
   self.fp_dirty = true
   match self.indices.get(key) {
     Some(idx) => {
-      let removed = self.entries[idx]
-      ignore(self.entries.remove(idx))
-      let mut i = idx
-      while i < self.entries.length() {
-        self.indices.set(self.entries[i].key, i)
-        i = i + 1
-      }
+      let removed = IndexMap::shift_remove_at(self, idx)
       self.indices.remove(key)
       Some(removed.value)
     }
@@ -656,13 +666,7 @@ pub fn[K : Hash + Eq, V] IndexMap::remove_entry(
   self.fp_dirty = true
   match self.indices.get(key) {
     Some(idx) => {
-      let removed = self.entries[idx]
-      ignore(self.entries.remove(idx))
-      let mut i = idx
-      while i < self.entries.length() {
-        self.indices.set(self.entries[i].key, i)
-        i = i + 1
-      }
+      let removed = IndexMap::shift_remove_at(self, idx)
       self.indices.remove(key)
       Some((removed.key, removed.value))
     }
