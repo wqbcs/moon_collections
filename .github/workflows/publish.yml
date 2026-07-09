@@ -1,3 +1,12 @@
+# MoonBit 社区标准发布工作流
+# 参考: https://github.com/moonbit-community/.github/tree/main/workflow-templates
+#
+# 使用方式:
+#   1. 在 GitHub 仓库 Settings → Secrets and variables → Actions 中
+#      添加 secret: MOONCAKES_TOKEN，值为 ~/.moon/credentials.json 的完整内容
+#      （包含 mooncakes.io 登录令牌的 JSON 对象）
+#   2. 手动触发: Actions → Publish to mooncakes.io → Run workflow
+
 name: Publish to mooncakes.io
 
 on:
@@ -14,27 +23,35 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install MoonBit
+      - name: Install MoonBit 0.10.3
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s 0.10.3
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      - name: Toolchain info
-        run: moon version --all
+      - name: Toolchain info & update
+        run: |
+          moon version --all
+          moon update
 
-      - name: Pre-publish check
+      - name: Pre-publish check (check + test + fmt + info)
         run: |
           moon check --target all --deny-warn
           moon test --target all
+          moon fmt && git diff --exit-code
+          moon info && git diff --exit-code
 
-      - name: Publish
+      - name: Publish to mooncakes.io
         env:
           MOONCAKES_TOKEN: ${{ secrets.MOONCAKES_TOKEN }}
         run: |
           if [ -z "$MOONCAKES_TOKEN" ]; then
             echo "Error: MOONCAKES_TOKEN secret is not set."
-            echo "Set it to the full contents of your ~/.moon/credentials.json"
-            echo "(a JSON object containing your mooncakes.io token)."
+            echo ""
+            echo "How to set it:"
+            echo "  1. Run 'moon login' locally (or paste your mooncakes.io token)"
+            echo "  2. Copy the content of ~/.moon/credentials.json"
+            echo "  3. Go to GitHub repo → Settings → Secrets and variables → Actions"
+            echo "  4. Add a new secret named MOONCAKES_TOKEN with the copied content"
             exit 1
           fi
           printf '%s' "$MOONCAKES_TOKEN" > ~/.moon/credentials.json

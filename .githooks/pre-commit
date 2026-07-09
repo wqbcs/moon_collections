@@ -1,3 +1,24 @@
 #!/bin/sh
+# MoonBit pre-commit hook — run before every commit
+# 安装: git config core.hooksPath .githooks
 
-moon check
+set -e
+
+echo "🔍 Pre-commit: moon check --deny-warn..."
+moon check --target all --deny-warn
+
+echo "🔍 Pre-commit: moon fmt..."
+moon fmt
+if ! git diff --exit-code; then
+  echo "❌ Formatting changed — stage changes and try again."
+  exit 1
+fi
+
+echo "🔍 Pre-commit: moon info..."
+moon info
+if ! git diff --exit-code; then
+  echo "❌ Public interface changed — stage changes and try again."
+  exit 1
+fi
+
+echo "✅ Pre-commit: all checks passed."

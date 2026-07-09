@@ -42,4 +42,4 @@ keywords = [
   "ecs",
 ]
 
-description = "DETERMINISTIC × VERIFIABLE × COMPOSABLE collections for MoonBit/WASM — 12 ordered structures, FNV-1a fingerprints with lazy caching (all 11 Deterministic structs), 293 tests. Same input → same output → same fingerprint, always."
+description = "DETERMINISTIC × VERIFIABLE × COMPOSABLE collections for MoonBit/WASM — 12 ordered structures, FNV-1a fingerprints with lazy caching (all 11 Deterministic structs), 311 tests. Same input → same output → same fingerprint, always."

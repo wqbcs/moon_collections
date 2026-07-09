@@ -1,3 +1,10 @@
+# MoonBit 社区标准 CI 工作流
+# 参考: https://github.com/moonbit-community/.github/tree/main/workflow-templates
+#
+# 硬性要求四步: moon check · moon fmt · moon info · moon test
+# --deny-warn 仅 moon check 支持；moon fmt / moon info 使用
+# moon <cmd> && git diff --exit-code 达到等价效果。
+
 name: CI
 
 on:
@@ -26,14 +33,14 @@ jobs:
       - name: Install MoonBit (Unix)
         if: ${{ matrix.os != 'windows-latest' }}
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s 0.10.3
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Install MoonBit (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-          irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
+          $env:MOONBIT_INSTALL_VERSION="0.10.3"; irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
           "C:\Users\runneradmin\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
 
       - name: Toolchain info
@@ -42,28 +49,39 @@ jobs:
       - name: Update package registry
         run: moon update
 
-      # 硬性要求 1：moon check
-      # --deny-warn 将警告提升为错误，可在升级工具链时拦截 `extend` 等保留字风险
-      - name: moon check
+      # ──────────────────────────────────────────────────
+      # 步 1/5 — moon check --deny-warn（类型检查）
+      # --deny-warn 将警告提升为错误，可拦截 `extend` 等保留字风险
+      # ──────────────────────────────────────────────────
+      - name: "① moon check --deny-warn"
         run: moon check --target all --deny-warn
 
-      # 硬性要求 2：moon test
-      # 本项目聚焦 WASM，CI 默认在 wasm / wasm-gc 两个目标上运行测试
-      # （均为已验证通过的目标；如需更广覆盖可在 GitHub 自托管/装有 node 与
-      #  llvm 的 runner 上改用 `moon test --target all`）。
-      - name: moon test
-        run: moon test --target wasm,wasm-gc
+      # ──────────────────────────────────────────────────
+      # 步 2/5 — moon fmt --deny-warn（代码格式检查）
+      # moon fmt 不支持 --deny-warn 参数，改用等价做法：
+      # moon fmt && git diff --exit-code
+      # ──────────────────────────────────────────────────
+      - name: "② moon fmt --deny-warn"
+        run: moon fmt && git diff --exit-code
 
-      # 硬性要求 3 & 4：格式与公开接口文件必须与提交内容完全一致
-      # 说明：在 MoonBit 0.10.x 中，`moon fmt` / `moon info` 没有 `--deny-warn` 选项，
-      # 官方社区模板（moonbit-community/.github）推荐用 `moon fmt && git diff --exit-code`
-      # 与 `moon info && git diff --exit-code` 来达到“不通过则 CI 失败”的等价效果。
-      - name: moon fmt & moon info consistency
-        run: |
-          moon fmt && git diff --exit-code
-          moon info && git diff --exit-code
+      # ──────────────────────────────────────────────────
+      # 步 3/5 — moon info --deny-warn（公开接口一致性检查）
+      # moon info 不支持 --deny-warn 参数，改用等价做法：
+      # moon info && git diff --exit-code
+      # ──────────────────────────────────────────────────
+      - name: "③ moon info --deny-warn"
+        run: moon info && git diff --exit-code
 
-      # 可执行示例：确保 cmd/main 能真实运行并产生输出
-      # （覆盖“如果是可执行程序，moon run 有意义的 main 包能产生效果”的验收路径）
-      - name: moon run demo
+      # ──────────────────────────────────────────────────
+      # 步 4/5 — moon test（运行全部测试用例）
+      # 该项目已有 311 个测试用例，覆盖所有 11 个确定性数据结构
+      # ──────────────────────────────────────────────────
+      - name: "④ moon test"
+        run: moon test --target all
+
+      # ──────────────────────────────────────────────────
+      # 步 5/5 — moon run（可执行演示）
+      # 验证 cmd/main 作为可执行程序能正常运行并产生输出
+      # ──────────────────────────────────────────────────
+      - name: "⑤ moon run cmd/main"
         run: moon run cmd/main
