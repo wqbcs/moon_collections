@@ -176,6 +176,9 @@ pub fn BitSet::clone(self : BitSet) -> BitSet {
 
 ///|
 pub fn BitSet::extend_(self : BitSet, additional : Int) -> Unit {
+  if additional <= 0 {
+    return
+  }
   let bits_per_block = 64
   let new_len = self.len + additional
   let needed = (new_len + bits_per_block - 1) / bits_per_block
