@@ -4,6 +4,9 @@
 # 硬性要求四步: moon check · moon fmt · moon info · moon test
 # --deny-warn 仅 moon check 支持；moon fmt / moon info 使用
 # moon <cmd> && git diff --exit-code 达到等价效果。
+#
+# 注意: 官方下载服务器 cli.moonbitlang.com 存在 CDN 限制，
+# 因此使用 chawyehsu/setup-moonup 通过备用镜像安装 MoonBit 工具链。
 
 name: CI
 
@@ -26,22 +29,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      - name: Install MoonBit (Unix)
-        if: ${{ matrix.os != 'windows-latest' }}
-        run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s 0.10.3
-          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
-
-      - name: Install MoonBit (Windows)
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: |
-          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-          $env:MOONBIT_INSTALL_VERSION="0.10.3"; irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
-          "C:\Users\runneradmin\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+      - name: Setup MoonBit toolchain
+        uses: chawyehsu/setup-moonup@v2
+        with:
+          moonbit-version: latest
 
       - name: Toolchain info
         run: moon version --all

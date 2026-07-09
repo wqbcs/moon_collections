@@ -6,6 +6,9 @@
 #      添加 secret: MOONCAKES_TOKEN，值为 ~/.moon/credentials.json 的完整内容
 #      （包含 mooncakes.io 登录令牌的 JSON 对象）
 #   2. 手动触发: Actions → Publish to mooncakes.io → Run workflow
+#
+# 注意: 官方下载服务器 cli.moonbitlang.com 存在 CDN 限制，
+# 因此使用 chawyehsu/setup-moonup 通过备用镜像安装 MoonBit 工具链。
 
 name: Publish to mooncakes.io
 
@@ -19,14 +22,14 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      - name: Install MoonBit 0.10.3
-        run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s 0.10.3
-          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Setup MoonBit toolchain
+        uses: chawyehsu/setup-moonup@v2
+        with:
+          moonbit-version: latest
 
       - name: Toolchain info & update
         run: |
