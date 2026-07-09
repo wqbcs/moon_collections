@@ -2,7 +2,14 @@
   <h1>🔄 moon_collections</h1>
   <p><strong>Deterministic Data Processing Framework for MoonBit / WASM</strong></p>
   <p><strong>确定性数据处理框架 — 为 MoonBit / WASM 而生</strong></p>
+</div>
 
+# 🔄 moon_collections
+
+**Deterministic Data Processing Framework for MoonBit / WASM**  
+**确定性数据处理框架 — 为 MoonBit / WASM 而生**
+
+<div align="center">
   <!-- Badges -->
   <p>
     <a href="https://github.com/wqbcs/moon_collections/actions/workflows/ci.yml">
