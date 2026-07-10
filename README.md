@@ -20,6 +20,7 @@
     <img src="https://img.shields.io/badge/LOC-4,890-blue" alt="4,890 LOC"/>
     <img src="https://img.shields.io/badge/structures-12-important" alt="12 structures"/>
     <img src="https://img.shields.io/badge/coverage-1,264_runs-success" alt="1244 runs"/>
+    <img src="https://img.shields.io/badge/audit-passing-success" alt="adversarial audit"/>
   </p>
 
   <p>
@@ -32,6 +33,18 @@
     <a href="#-大赛验收核对">🎯 大赛验收核对</a>
   </p>
 </div>
+
+---
+
+## 🆕 What's New — v0.2.4
+
+> **对抗性审查（Adversarial Code Review）完成**：对全部 15 个包进行了深度安全审查，
+> 修复 2 个 Bug（负值位移 UB、空集保护缺失），确认指纹缓存一致性全覆盖。
+
+| 版本 | 亮点 | 验证 |
+|:----:|------|:----:|
+| **v0.2.4** | 对抗性审查 Bug 修复、回归测试 | `moon check --deny-warn` ✅ • 316 测试全部通过 ✅ |
+| **v0.2.3** | 7 项性能优化（块级跳过、O(n²)→O(n)） | `moon check --deny-warn` ✅ • 315 测试全部通过 ✅ |
 
 ---
 
@@ -646,7 +659,8 @@ moon_collections/                         🌐 模块名: wqbcs/moon_collections
 |:----:|----------|:----:|
 | v0.1.0 | IndexMap + IndexSet + FNV-1a 指纹基础设施 | 2026-06 |
 | v0.2.0 | 全部 12 种数据结构 + CI/CD 流水线 + 中英双语 README | 2026-07 |
-| v0.2.4 | 代码重构（消除重复逻辑）+ 质量全面优化 + mooncakes.io 发布 | 2026-07 |
+| v0.2.3 | 批量性能优化（块级跳过、O(n²)→O(n)字符串构建）、IndexMap 一致性修复 | 2026-07-10 |
+| v0.2.4 | 对抗性审查 Bug 修复（负值位移、空集保护）、指纹缓存全覆盖审查 | 2026-07-10 |
 
 ---
 
