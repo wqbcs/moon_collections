@@ -60,6 +60,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `DisjointSet.all_components` — O(n²) → O(n) via two-pass counting and allocation
 - All 293 tests passing (up from 290)
 
+## [0.2.3] - 2026-07-10
+
+### Fixed
+
+- `IndexMap::new()` — `fp_dirty` 初始值 `false→true`，与其他 10 个结构体一致，消除潜在的不一致
+
+### Performance
+
+- `IndexMap::clone()` — 直接拷贝 `entries` 数组 + 单遍重建 `indices`，替代 O(n) `insert` 路径
+- `BitSet.to_bit_string()` — O(n²)→O(n)，使用 `Array[String]::join("")` 替代字符串逐次拼接
+- `BitFlags.to_bit_string()` — 同上修复
+- `BitSet.first_one` / `last_one` / `first_zero` / `last_zero` — 块级跳过优化（稀疏位集下从 O(n) 降至 O(n/64)）
+- `BitSet.next_one` / `prev_one` — 块级跳过优化
+
+### Tests
+
+- 新增 4 个块级边界测试（跨块扫描、中空块跳过、全块零查找、跨块 next/prev）
+- 总测试用例数：311 → 315
+
 ## [0.1.0] - 2026-06-08
 
 ### Added
