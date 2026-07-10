@@ -10,16 +10,16 @@
       <img src="https://img.shields.io/github/actions/workflow/status/wqbcs/moon_collections/ci.yml?branch=main&label=CI&logo=github" alt="CI"/>
     </a>
     <a href="https://mooncakes.io/docs/wqbcs/moon_collections">
-      <img src="https://img.shields.io/badge/mooncakes-v0.2.2-8A2BE2" alt="mooncakes"/>
+      <img src="https://img.shields.io/badge/mooncakes-v0.2.4-8A2BE2" alt="mooncakes"/>
     </a>
-    <img src="https://img.shields.io/badge/tests-311_✓-brightgreen" alt="311 tests"/>
+    <img src="https://img.shields.io/badge/tests-316_✓-brightgreen" alt="316 tests"/>
     <img src="https://img.shields.io/badge/backends-4_✓-brightgreen" alt="4 backends"/>
     <img src="https://img.shields.io/badge/warnings-0_✓-success" alt="zero warnings"/>
     <img src="https://img.shields.io/badge/MoonBit-%E2%89%A50.10.3-blueviolet" alt="MoonBit ≥0.10.3"/>
     <img src="https://img.shields.io/badge/license-Apache_2.0-green" alt="Apache 2.0"/>
     <img src="https://img.shields.io/badge/LOC-4,890-blue" alt="4,890 LOC"/>
     <img src="https://img.shields.io/badge/structures-12-important" alt="12 structures"/>
-    <img src="https://img.shields.io/badge/coverage-1,244_runs-success" alt="1244 runs"/>
+    <img src="https://img.shields.io/badge/coverage-1,264_runs-success" alt="1244 runs"/>
   </p>
 
   <p>
@@ -51,7 +51,7 @@
 │       相同输入 → 相同输出 → 相同指纹 → 永远不变                   │
 │       Same Input → Same Output → Same Fingerprint → ALWAYS       │
 │                                                                  │
-│   📦 交付物：12 种数据结构 · 2 个开放特征 · 311 个测试           │
+│   📦 交付物：12 种数据结构 · 2 个开放特征 · 316 个测试           │
 │          4 后端全覆盖 · 4,890 行源码 · 零警告 · CI/CD 完备        │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
@@ -72,7 +72,7 @@
 | `remove()` 行为 | 🔄 swap-with-last（破坏顺序） | ✅ **shift_remove**（保持顺序） | 审计日志完整性 |
 | WASM 安全性 | 💥 `get()` 可能 trap | ✅ 返回 `Option`（零 trap） | 安全第一 |
 | 跨节点验证 | ❌ 无法实现 | ✅ `ordered_eq()` 位置感知相等性 | 共识协议 |
-| 测试确定性 | ❌ 无法写顺序无关断言 | ✅ **311 测试 × 4 后端全部一致** | CI 可靠性 |
+| 测试确定性 | ❌ 无法写顺序无关断言 | ✅ **316 测试 × 4 后端全部一致** | CI 可靠性 |
 | 缓存验证 | ❌ 没有指纹机制 | ✅ **惰性 FNV-1a 指纹 O(1) 缓存** | 缓存失效判断 |
 
 > **这不是性能问题——这是正确性问题。** 不确定性破坏分布式共识、可重现构建、序列化一致性、审计日志完整性和跨平台验证。我们在集合层解决它。
@@ -96,11 +96,11 @@
 ## 📦 快速数据
 
 ```
-📚  12 种数据结构              🔬  311 个测试用例
+📚  12 种数据结构              🔬  316 个测试用例
 🔗  2 个开放特征（open trait）  🖥️  4 个后端全覆盖
 🧬  FNV-1a 指纹算法             🌐  WASM / WASM-GC / JS / Native
 ⚡  惰性缓存 O(1) 访问           📏  4,890 行 MoonBit 源码
-🚫  0 警告（--deny-warn）        🎯  1,244 次运行全部通过
+🚫  0 警告（--deny-warn）        🎯  1,264 次运行全部通过
 📦  已发布到 mooncakes.io        🔒  pre-commit 三重门
 🛡️  CI/CD 五步流水线             📖  435 行 README 双版本
 ```
@@ -408,10 +408,10 @@ pub(open) trait Deterministic: Collection {
 
 | 指标 | 数值 | 含义 |
 |------|:----:|------|
-| 测试用例总数 | **311** | 覆盖全部 12 个数据结构 |
+| 测试用例总数 | **316** | 覆盖全部 12 个数据结构 |
 | 测试文件数 | **15** | 每个包独立测试 |
 | 后端覆盖 | **4** (WASM · WASM-GC · JS · Native) | 跨平台验证 |
-| 单次 CI 运行 | **1,244 次** (311 × 4) | 全量回归 |
+| 单次 CI 运行 | **1,264 次** (316 × 4) | 全量回归 |
 | 通过率 | **100%** | 零失败 |
 | 零警告严格模式 | ✅ `moon check --deny-warn` | 拦截保留字/死代码 |
 
@@ -441,7 +441,7 @@ pub(open) trait Deterministic: Collection {
 | ① | `moon check --target all --deny-warn` | 类型错误、保留字、死代码 | ~5s |
 | ② | `moon fmt && git diff --exit-code` | 格式偏差 | ~2s |
 | ③ | `moon info && git diff --exit-code` | 公开接口偏差 | ~2s |
-| ④ | `moon test --target all` | 回归缺陷（1,244 次测试） | ~30s |
+| ④ | `moon test --target all` | 回归缺陷（1,264 次测试） | ~30s |
 | ⑤ | `moon run cmd/main` | 运行时正确性 | ~2s |
 
 > 任何一道门未通过 → PR 不能合并。没有例外。
@@ -476,9 +476,9 @@ moon_collections 对照 OSC 2026 大赛验收标准逐条达标：
 | 2 | GitHub 公开可访问 | ✅ | [github.com/wqbcs/moon_collections](https://github.com/wqbcs/moon_collections) |
 | 3 | 源码结构清晰，核心功能完成 | ✅ | 15 包按功能分目录，无循环依赖 |
 | 4 | README 完整可复现 | ✅ | 本文档，含安装/使用/示例/API/架构 |
-| 5 | CI 覆盖检查/构建/测试 | ✅ | 5 步流水线，1,244 次测试全通过 |
+| 5 | CI 覆盖检查/构建/测试 | ✅ | 5 步流水线，1,264 次测试全通过 |
 | 6 | 可运行示例 | ✅ | `moon run cmd/main` 输出 6 段确定性证明 |
-| 7 | 完整测试覆盖核心路径 | ✅ | 311 测试 × 4 后端，全部通过 |
+| 7 | 完整测试覆盖核心路径 | ✅ | 316 测试 × 4 后端，全部通过 |
 | **8** | **已发布到 mooncakes.io** | **✅** | **`moon add wqbcs/moon_collections`** |
 | 9 | OSI 许可证 | ✅ | Apache 2.0 |
 | 10 | 有效代码行数 | ✅ | 4,890 行 |
@@ -542,7 +542,7 @@ moon_collections 对照 OSC 2026 大赛验收标准逐条达标：
 ## 🏗️ Architecture （项目架构）
 
 ```
-moon_collections/                         🌐 模块名: wqbcs/moon_collections v0.2.2
+moon_collections/                         🌐 模块名: wqbcs/moon_collections v0.2.4
 │
 ├── moon.mod                              📋 模块配置（名称/版本/许可证/关键词）
 ├── moon.pkg                              📦 根包（工厂函数 + 转换器重导出）
@@ -572,7 +572,7 @@ moon_collections/                         🌐 模块名: wqbcs/moon_collections
 │   └── bitset_test.mbt                   + bitflags 测试
 │
 ├── counter/                              📊 频率分析
-│   ├── counter.mbt                       Counter[K]（311 行）
+│   ├── counter.mbt                       Counter[K]（316 行）
 │   └── counter_test.mbt
 │
 ├── defaultmap/                           🗺️ 默认值映射
@@ -646,7 +646,7 @@ moon_collections/                         🌐 模块名: wqbcs/moon_collections
 |:----:|----------|:----:|
 | v0.1.0 | IndexMap + IndexSet + FNV-1a 指纹基础设施 | 2026-06 |
 | v0.2.0 | 全部 12 种数据结构 + CI/CD 流水线 + 中英双语 README | 2026-07 |
-| v0.2.2 | 代码重构（消除重复逻辑）+ 质量全面优化 + mooncakes.io 发布 | 2026-07 |
+| v0.2.4 | 代码重构（消除重复逻辑）+ 质量全面优化 + mooncakes.io 发布 | 2026-07 |
 
 ---
 
@@ -661,7 +661,7 @@ git config core.hooksPath .githooks
 # 3. 验证
 moon check --deny-warn && moon test --target all
 
-# 4. 提交 PR — CI 自动运行 1,244 次测试
+# 4. 提交 PR — CI 自动运行 1,264 次测试
 ```
 
 所有贡献必须维护**确定性不变性（Determinism Invariant）**。
