@@ -456,3 +456,79 @@ test "bitflags_clear_all_set_all" {
   let set = bf.set_all()
   assert_true(set == BitFlags::all())
 }
+
+///|
+test "bitset_block_boundary_first_last_one" {
+  // Test block-level skipping across 64-bit boundaries
+  let bs = BitSet::new(200)
+  bs.set(0)
+  bs.set(63)
+  bs.set(64)
+  bs.set(127)
+  bs.set(150)
+  assert_true(bs.first_one() == Some(0))
+  assert_true(bs.last_one() == Some(150))
+  // Clear first and last, re-check
+  bs.clear(0)
+  assert_true(bs.first_one() == Some(63))
+  bs.clear(150)
+  assert_true(bs.last_one() == Some(127))
+}
+
+///|
+test "bitset_empty_mid_block_skip" {
+  // Empty block in the middle: block 0 has bits, block 1 empty, block 2 has bits
+  let bs = BitSet::new(200)
+  bs.set(5)
+  bs.set(130)
+  assert_true(bs.first_one() == Some(5))
+  assert_true(bs.last_one() == Some(130))
+  assert_true(bs.next_one(6) == Some(130))
+  assert_true(bs.prev_one(129) == Some(5))
+  // len not aligned to 64
+  bs.clear(5)
+  bs.clear(130)
+  let bs2 = BitSet::new(70)
+  bs2.set(68)
+  bs2.set(69)
+  assert_true(bs2.first_one() == Some(68))
+  assert_true(bs2.last_one() == Some(69))
+  assert_true(bs2.next_one(68) == Some(68))
+  assert_true(bs2.next_one(69) == Some(69))
+  assert_true(bs2.next_one(70) == None)
+}
+
+///|
+test "bitset_first_zero_last_zero_full_blocks" {
+  // Zero search with full blocks
+  let bs = BitSet::new(66)
+  bs.set_all()
+  assert_true(bs.first_zero() == None)
+  assert_true(bs.last_zero() == None)
+  // Clear one bit in each block
+  bs.clear(0)
+  assert_true(bs.first_zero() == Some(0))
+  bs.clear(64)
+  assert_true(bs.last_zero() == Some(64))
+}
+
+///|
+test "bitset_next_prev_cross_block" {
+  // next_one and prev_one crossing block boundaries
+  let bs = BitSet::new(200)
+  bs.set(10)
+  bs.set(70)
+  bs.set(130)
+  assert_true(bs.next_one(10) == Some(10))
+  assert_true(bs.next_one(11) == Some(70))
+  assert_true(bs.next_one(71) == Some(130))
+  assert_true(bs.next_one(131) == None)
+  assert_true(bs.prev_one(130) == Some(130))
+  assert_true(bs.prev_one(129) == Some(70))
+  assert_true(bs.prev_one(69) == Some(10))
+  assert_true(bs.prev_one(9) == None)
+  // out-of-bounds handling
+  assert_true(bs.next_one(-1) == None)
+  assert_true(bs.next_one(200) == None)
+  assert_true(bs.prev_one(-1) == None)
+}

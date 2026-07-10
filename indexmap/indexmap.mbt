@@ -23,7 +23,7 @@ pub fn[K : Hash + Eq, V] IndexMap::new() -> IndexMap[K, V] {
     entries: [],
     indices: @hashmap.HashMap([]),
     fp_cache: @fp.fnv_offset_basis,
-    fp_dirty: false,
+    fp_dirty: true,
   }
 }
 
@@ -430,7 +430,14 @@ pub fn[K : Hash + Eq, V] IndexMap::from_array(
 pub fn[K : Hash + Eq, V] IndexMap::clone(
   self : IndexMap[K, V],
 ) -> IndexMap[K, V] {
-  IndexMap::from_array(IndexMap::to_array(self))
+  let new_entries = self.entries.iter().to_array()
+  let new_indices = @hashmap.HashMap([])
+  let mut i = 0
+  while i < new_entries.length() {
+    new_indices.set(new_entries[i].key, i)
+    i = i + 1
+  }
+  { entries: new_entries, indices: new_indices, fp_cache: 0UL, fp_dirty: true }
 }
 
 ///|

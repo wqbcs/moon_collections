@@ -341,13 +341,15 @@ pub fn BitSet::is_disjoint(self : BitSet, other : BitSet) -> Bool {
 
 ///|
 pub fn BitSet::to_bit_string(self : BitSet) -> String {
-  let mut s = ""
+  let chars : Array[String] = Array::make(self.len, "0")
   let mut i = 0
   while i < self.len {
-    s = s + (if BitSet::contains(self, i) { "1" } else { "0" })
+    if BitSet::contains(self, i) {
+      chars[i] = "1"
+    }
     i = i + 1
   }
-  s
+  chars.join("")
 }
 
 ///|
@@ -393,12 +395,25 @@ pub fn BitSet::capacity(self : BitSet) -> Int {
 
 ///|
 pub fn BitSet::first_one(self : BitSet) -> Int? {
-  let mut i = 0
-  while i < self.len {
-    if BitSet::contains(self, i) {
-      return Some(i)
+  let bits_per_block = 64
+  let mut block = 0
+  while block < self.bits.length() {
+    if self.bits[block] != 0UL {
+      let base = block * bits_per_block
+      let limit = if base + bits_per_block < self.len {
+        base + bits_per_block
+      } else {
+        self.len
+      }
+      let mut i = base
+      while i < limit {
+        if BitSet::contains(self, i) {
+          return Some(i)
+        }
+        i = i + 1
+      }
     }
-    i = i + 1
+    block = block + 1
   }
   None
 }
@@ -408,24 +423,55 @@ pub fn BitSet::last_one(self : BitSet) -> Int? {
   if self.len == 0 {
     return None
   }
-  let mut i = self.len - 1
-  while i >= 0 {
-    if BitSet::contains(self, i) {
-      return Some(i)
+  let bits_per_block = 64
+  let mut block = self.bits.length() - 1
+  while block >= 0 {
+    if self.bits[block] != 0UL {
+      let base = block * bits_per_block
+      let limit = if base + bits_per_block < self.len {
+        base + bits_per_block
+      } else {
+        self.len
+      }
+      let mut i = limit - 1
+      while i >= base {
+        if BitSet::contains(self, i) {
+          return Some(i)
+        }
+        i = i - 1
+      }
     }
-    i = i - 1
+    block = block - 1
   }
   None
 }
 
 ///|
 pub fn BitSet::next_one(self : BitSet, from : Int) -> Int? {
-  let mut i = from
-  while i < self.len {
-    if BitSet::contains(self, i) {
-      return Some(i)
+  if from < 0 || from >= self.len {
+    return None
+  }
+  let bits_per_block = 64
+  let start_block = from / bits_per_block
+  let mut block = start_block
+  while block < self.bits.length() {
+    if self.bits[block] != 0UL {
+      let base = block * bits_per_block
+      let start_i = if block == start_block { from } else { base }
+      let limit = if base + bits_per_block < self.len {
+        base + bits_per_block
+      } else {
+        self.len
+      }
+      let mut i = start_i
+      while i < limit {
+        if BitSet::contains(self, i) {
+          return Some(i)
+        }
+        i = i + 1
+      }
     }
-    i = i + 1
+    block = block + 1
   }
   None
 }
@@ -436,12 +482,27 @@ pub fn BitSet::prev_one(self : BitSet, from : Int) -> Int? {
     return None
   }
   let start = if from < self.len { from } else { self.len - 1 }
-  let mut i = start
-  while i >= 0 {
-    if BitSet::contains(self, i) {
-      return Some(i)
+  let bits_per_block = 64
+  let start_block = start / bits_per_block
+  let mut block = start_block
+  while block >= 0 {
+    if self.bits[block] != 0UL {
+      let base = block * bits_per_block
+      let end_i = if block == start_block {
+        start
+      } else {
+        base + bits_per_block - 1
+      }
+      let limit = base
+      let mut i = if end_i >= self.len { self.len - 1 } else { end_i }
+      while i >= limit {
+        if BitSet::contains(self, i) {
+          return Some(i)
+        }
+        i = i - 1
+      }
     }
-    i = i - 1
+    block = block - 1
   }
   None
 }
@@ -507,12 +568,34 @@ pub fn BitSet::all_set(self : BitSet) -> Bool {
 
 ///|
 pub fn BitSet::first_zero(self : BitSet) -> Int? {
-  let mut i = 0
-  while i < self.len {
-    if !BitSet::contains(self, i) {
-      return Some(i)
+  let bits_per_block = 64
+  let mut block = 0
+  while block < self.bits.length() {
+    let all_ones = 0UL.lnot()
+    // In the last block, mask out bits beyond self.len
+    let base = block * bits_per_block
+    let limit = if base + bits_per_block < self.len {
+      base + bits_per_block
+    } else {
+      self.len
     }
-    i = i + 1
+    let effective_bits = limit - base
+    let block_ones_mask = if effective_bits < bits_per_block {
+      (1UL << effective_bits) - 1UL
+    } else {
+      all_ones
+    }
+    if (self.bits[block] & block_ones_mask) != block_ones_mask {
+      // This block has at least one zero
+      let mut i = base
+      while i < limit && i < self.len {
+        if !BitSet::contains(self, i) {
+          return Some(i)
+        }
+        i = i + 1
+      }
+    }
+    block = block + 1
   }
   None
 }
@@ -522,12 +605,32 @@ pub fn BitSet::last_zero(self : BitSet) -> Int? {
   if self.len == 0 {
     return None
   }
-  let mut i = self.len - 1
-  while i >= 0 {
-    if !BitSet::contains(self, i) {
-      return Some(i)
+  let bits_per_block = 64
+  let mut block = self.bits.length() - 1
+  while block >= 0 {
+    let all_ones = 0UL.lnot()
+    let base = block * bits_per_block
+    let limit = if base + bits_per_block < self.len {
+      base + bits_per_block
+    } else {
+      self.len
     }
-    i = i - 1
+    let effective_bits = limit - base
+    let block_ones_mask = if effective_bits < bits_per_block {
+      (1UL << effective_bits) - 1UL
+    } else {
+      all_ones
+    }
+    if (self.bits[block] & block_ones_mask) != block_ones_mask {
+      let mut i = limit - 1
+      while i >= base {
+        if !BitSet::contains(self, i) {
+          return Some(i)
+        }
+        i = i - 1
+      }
+    }
+    block = block - 1
   }
   None
 }

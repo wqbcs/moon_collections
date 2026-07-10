@@ -123,14 +123,16 @@ pub fn BitFlags::count_zeros(self : BitFlags) -> Int {
 
 ///|
 pub fn BitFlags::to_bit_string(self : BitFlags) -> String {
-  let mut s = ""
+  let chars : Array[String] = Array::make(64, "0")
   let mut i = 0
   while i < 64 {
     let shifted = self.bits >> i
-    s = (if (shifted & 1UL) != 0UL { "1" } else { "0" }) + s
+    if (shifted & 1UL) != 0UL {
+      chars[63 - i] = "1"
+    }
     i = i + 1
   }
-  s
+  chars.join("")
 }
 
 ///|
