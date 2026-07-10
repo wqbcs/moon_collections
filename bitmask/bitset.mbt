@@ -478,7 +478,7 @@ pub fn BitSet::next_one(self : BitSet, from : Int) -> Int? {
 
 ///|
 pub fn BitSet::prev_one(self : BitSet, from : Int) -> Int? {
-  if from < 0 {
+  if from < 0 || self.len == 0 {
     return None
   }
   let start = if from < self.len { from } else { self.len - 1 }
@@ -571,8 +571,6 @@ pub fn BitSet::first_zero(self : BitSet) -> Int? {
   let bits_per_block = 64
   let mut block = 0
   while block < self.bits.length() {
-    let all_ones = 0UL.lnot()
-    // In the last block, mask out bits beyond self.len
     let base = block * bits_per_block
     let limit = if base + bits_per_block < self.len {
       base + bits_per_block
@@ -580,15 +578,20 @@ pub fn BitSet::first_zero(self : BitSet) -> Int? {
       self.len
     }
     let effective_bits = limit - base
+    // Skip blocks entirely beyond self.len (after truncate, bits.length > needed)
+    if effective_bits <= 0 {
+      block = block + 1
+      continue
+    }
+    let all_ones = 0UL.lnot()
     let block_ones_mask = if effective_bits < bits_per_block {
       (1UL << effective_bits) - 1UL
     } else {
       all_ones
     }
     if (self.bits[block] & block_ones_mask) != block_ones_mask {
-      // This block has at least one zero
       let mut i = base
-      while i < limit && i < self.len {
+      while i < limit {
         if !BitSet::contains(self, i) {
           return Some(i)
         }
@@ -608,7 +611,6 @@ pub fn BitSet::last_zero(self : BitSet) -> Int? {
   let bits_per_block = 64
   let mut block = self.bits.length() - 1
   while block >= 0 {
-    let all_ones = 0UL.lnot()
     let base = block * bits_per_block
     let limit = if base + bits_per_block < self.len {
       base + bits_per_block
@@ -616,6 +618,12 @@ pub fn BitSet::last_zero(self : BitSet) -> Int? {
       self.len
     }
     let effective_bits = limit - base
+    // Skip blocks entirely beyond self.len (after truncate, bits.length > needed)
+    if effective_bits <= 0 {
+      block = block - 1
+      continue
+    }
+    let all_ones = 0UL.lnot()
     let block_ones_mask = if effective_bits < bits_per_block {
       (1UL << effective_bits) - 1UL
     } else {

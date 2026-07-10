@@ -79,6 +79,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 新增 4 个块级边界测试（跨块扫描、中空块跳过、全块零查找、跨块 next/prev）
 - 总测试用例数：311 → 315
 
+## [0.2.4] - 2026-07-10
+
+### Fixed
+
+- `BitSet.first_zero()` / `last_zero()` — 对抗性审查发现：truncate 后 `bits.length()` 可能大于 `len` 所需块数，导致 `effective_bits < 0` 时产生负值位移（`1UL << -54`）行为未定义。添加 `effective_bits <= 0` 保护跳过区块
+- `BitSet.prev_one()` — 添加显式 `self.len == 0` 保护（当 `self.len == 0` 时 `start = -1` 可能进入无效路径）
+- 新增回归测试验证 truncate + first_zero 场景（316 → 316 测试全通过）
+
 ## [0.1.0] - 2026-06-08
 
 ### Added

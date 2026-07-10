@@ -532,3 +532,28 @@ test "bitset_next_prev_cross_block" {
   assert_true(bs.next_one(200) == None)
   assert_true(bs.prev_one(-1) == None)
 }
+
+///|
+test "bitset_truncate_preserves_invariants" {
+  // Regression: after truncate, bits.length may exceed what len needs.
+  // first_zero/last_zero must not compute negative shifts on trailing blocks.
+  let bs = BitSet::new(200)
+  bs.set(150)
+  bs.truncate(64)
+  // After truncate, bits.length is still >1 but len=64.
+  // first_zero should work: all bits 0-63 are zero
+  assert_true(bs.first_zero() == Some(0))
+  assert_true(bs.len() == 64)
+  // Set all valid bits, then check no zeros
+  bs.set_all()
+  assert_true(bs.first_zero() == None)
+  assert_true(bs.last_zero() == None)
+  // Clear bit 0, first_zero should find it
+  bs.clear(0)
+  assert_true(bs.first_zero() == Some(0))
+  // Clear last valid bit
+  bs.clear_all()
+  bs.set(63)
+  bs.clear(63)
+  assert_true(bs.last_zero() == Some(63))
+}
